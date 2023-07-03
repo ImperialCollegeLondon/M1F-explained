@@ -9,7 +9,14 @@ A Xena summer project.
 This is a Lean 4 project. Assuming you have already [installed Lean and its supporting tools](https://leanprover-community.github.io/get_started.html#regular-install) you can install this Lean project with
 
 ```
-git clone ImperialCollegeLondon/M1F-explained
+git clone git@github.com:ImperialCollegeLondon/M1F-explained.git
+cd M1F-explained/
+lake exe cache get
+```
+
+and then you can start the project in VS Code by typing
+```
+code .
 ```
 
 ## Contributors.
