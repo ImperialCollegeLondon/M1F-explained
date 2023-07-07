@@ -1,13 +1,13 @@
-import Mathbin.SetTheory.Zfc.Basic
-import Mathbin.Tactic.Default
+import Mathlib.SetTheory.ZFC.Basic
+import Mathlib.Tactic
 
 namespace Chapter01.Exercise01
 
-theorem Set.well_founded : ¬∃ α : ZFSet, α = {α} := by sorry
+theorem ZFSet.well_founded : ¬∃ α : ZFSet, α = {α} := by sorry
 
 variable (α : ZFSet.{0})
 
-def zero : ZFSet.{0} where
+def zero : ZFSet.{0} := {}
 
 def one : ZFSet.{0} :=
   {zero}
@@ -65,7 +65,7 @@ theorem part_b (h1 : α ≠ one)
   refine' ⟨_, _, _, _, _⟩
   · -- {α} ≠ α
     intro h
-    apply Set.well_founded
+    apply ZFSet.well_founded
     use α
     rw [h]
   · -- α ≠ {1,α}
@@ -119,8 +119,7 @@ theorem part_h : ¬{one, α} ∉ a α := by
 
 theorem part_i : ∅ ⊆ a α := by
   intro x hx
-  simp at hx 
-  cases hx
+  simp at hx
 
 end Chapter01.Exercise01
 
