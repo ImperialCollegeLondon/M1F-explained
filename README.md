@@ -21,7 +21,7 @@ code .
 
 ## Contributors.
 
-Nobody yet.
+Kevin Buzzard, Mark Zhou, Siddharth Hariharan, Katie Watson, Douhan Wang, Zhangir Azerbayev, chrt, Yuchen Wang, Xialu Zheng, Natasha Johnson.
 
 ## Contributing.
 
