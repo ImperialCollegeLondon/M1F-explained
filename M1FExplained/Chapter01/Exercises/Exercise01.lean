@@ -1,17 +1,26 @@
-import Mathlib.SetTheory.ZFC.Basic
-import Mathlib.Tactic
+import Mathbin.SetTheory.Zfc.Basic
+import Mathbin.Tactic.Default
 
-lemma ZFSet.well_founded : ¬ ∃ α : ZFSet, α = {α} := by
-  sorry
+namespace Chapter01.Exercise01
+
+theorem Set.well_founded : ¬∃ α : ZFSet, α = {α} := by sorry
 
 variable (α : ZFSet.{0})
 
-def zero : ZFSet.{0} := {}
-def one : ZFSet.{0} := {zero}
-def two : ZFSet.{0} := {zero, one}
-def three : ZFSet.{0} := {zero, one, two}
+def zero : ZFSet.{0} where
 
-@[reducible] def A : ZFSet := {α, {one,α},{three},{{one,three}},three}
+def one : ZFSet.{0} :=
+  {zero}
+
+def two : ZFSet.{0} :=
+  {zero, one}
+
+def three : ZFSet.{0} :=
+  {zero, one, two}
+
+@[reducible]
+def a : ZFSet :=
+  {α, {one, α}, {three}, {{one, three}}, three}
 
 /-
 
@@ -22,115 +31,96 @@ depends on the input variable `α`, and some parts
 of this question depend on the value of `α`.
 
 -/
+theorem part_a : α ∈ a α := by simp
 
-lemma part_a : α ∈ A (α) := by
-  simp
-
-lemma part_b_helper {α β} (h : α ≠ β) : ({α} : ZFSet) ≠ {β} := by
+theorem part_b_helper {α β} (h : α ≠ β) : ({α} : ZFSet) ≠ {β} :=
+  by
   intro h2
   apply h
-  have : α ∈ ({β} : ZFSet)
-  { simp [← h2] }
+  have : α ∈ ({β} : ZFSet) := by simp [← h2]
   simpa
 
-lemma part_b_helper' : zero ≠ one := by
+theorem part_b_helper' : zero ≠ one := by
   intro h
   have h0 : zero ∈ zero := by
-    nth_rewrite 2 [h]
+    nth_rw 2 [h]
     simp [zero, one]
   simpa [zero] using h0
-  done
-
-#exit -- the rest needs to be translated from Lean 3. Investigating mathport!
 
 /-
 I'm assuming part(b) is supposed to be false. 
 However this depends on what α is supposed to be
 and also on the implementation of the set `3`.
 -/
-lemma part_b (h1 : α ≠ one) -- otherwise {α} = {1,α} ∈ A
-  (h3 : α ≠ three) -- otherwise {α} ∈ A
-  (h13 : α ≠ {one, three}) -- otherwise {α} ∈ A
-  : {α} ∉ A α :=
-begin
-  simp,
-  push_neg,
-  refine ⟨_, _, _, _, _⟩,
-  { -- {α} ≠ α
-    intro h,
-    apply ZFSet.well_founded,
-    use α,
-    rw h, },
-  { -- α ≠ {1,α}
-    intro h,
-    apply h1,
-    have : one ∈ ({one, α} : ZFSet) := by simp,
-    rw ← h at this,
-    symmetry,
-    simpa, },  
-  { -- {α} ≠ {three}
-    exact h3, },
-  { -- {α} ≠ {{one,three}}
-    exact h13, },
-  { -- With our implementation of {3} we can't have
+theorem part_b (h1 : α ≠ one)
+    -- otherwise {α} = {1,α} ∈ A
+    (h3 : α ≠ three)
+    -- otherwise {α} ∈ A
+    (h13 : α ≠ {one, three}) :-- otherwise {α} ∈ A
+      {α} ∉
+      a α :=
+  by
+  simp
+  push_neg
+  refine' ⟨_, _, _, _, _⟩
+  · -- {α} ≠ α
+    intro h
+    apply Set.well_founded
+    use α
+    rw [h]
+  · -- α ≠ {1,α}
+    intro h
+    apply h1
+    have : one ∈ ({one, α} : ZFSet) := by simp
+    rw [← h] at this 
+    symm
+    simpa
+  ·-- {α} ≠ {three}
+    exact h3
+  ·-- {α} ≠ {{one,three}}
+    exact h13
+  · -- With our implementation of {3} we can't have
     -- {α} = 3, but if you implement the naturals
     -- numbers as n+1={n} then we would have to avoid
     -- the case α = 2 as well
-    intro h,
-    apply part_b_helper',
-    transitivity α,
-    { suffices : zero ∈ ({α} : ZFSet),
-      { simpa },
-      rw h,
-      simp [three], },
-    { suffices : one ∈ ({α} : ZFSet),
-      { symmetry,
-        simpa },
-      rw h,
-      simp [three], }, }
-end
+    intro h
+    apply part_b_helper'
+    trans α
+    · suffices zero ∈ ({α} : ZFSet) by simpa
+      rw [h]
+      simp [three]
+    · suffices one ∈ ({α} : ZFSet) by
+        symm
+        simpa
+      rw [h]
+      simp [three]
 
 -- This part is true if α = 1
-lemma part_c (h1 : α ≠ one) : ¬ {one, α} ⊆ A α :=
-begin
-  sorry
-end
+theorem part_c (h1 : α ≠ one) : ¬{one, α} ⊆ a α := by sorry
 
-lemma part_d : {three, {three}} ⊆ A α :=
-begin
-  sorry
-end
+theorem part_d : {three, {three}} ⊆ a α := by sorry
 
 -- This part is true if α = three or if α = {one, three}
-lemma part_e (h1 : α ≠ three) (h13 : α ≠ {one, three}) : ¬ {one, three} ∈ A α := 
-begin
-  sorry
-end
+theorem part_e (h1 : α ≠ three) (h13 : α ≠ {one, three}) : ¬{one, three} ∈ a α := by sorry
 
 -- this part is true if α = three or if α = {one, three}
 -- (because it's the same question as part (e))
-lemma part_f (h1 : α ≠ three) (h13 : α ≠ {one, three}) : ¬ {{one, three}} ⊆ A α := 
-begin
-  sorry
-end
+theorem part_f (h1 : α ≠ three) (h13 : α ≠ {one, three}) : ¬{{one, three}} ⊆ a α := by sorry
 
-lemma part_g : {{one, α}} ⊆ A α :=
-begin
-  intros x hx,
-  simp at hx,
-  subst hx,
-  simp,
-end
+theorem part_g : {{one, α}} ⊆ a α := by
+  intro x hx
+  simp at hx 
+  subst hx
+  simp
 
-lemma part_h : ¬ ({one,α} ∉ A α) :=
-begin
-  push_neg,
-  simp,
-end
+theorem part_h : ¬{one, α} ∉ a α := by
+  push_neg
+  simp
 
-lemma part_i : ∅ ⊆ A α :=
-begin
-  intros x hx,
-  simp at hx,
-  cases hx,
-end
+theorem part_i : ∅ ⊆ a α := by
+  intro x hx
+  simp at hx 
+  cases hx
+
+end Chapter01.Exercise01
+
