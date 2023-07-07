@@ -1,1 +1,1 @@
-def hello := "world"
+import M1FExplained.test
