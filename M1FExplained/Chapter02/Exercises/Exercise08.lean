@@ -1,16 +1,16 @@
-import Mathbin.Tactic.Default
+import Mathlib.Tactic
 
 namespace Chapter02.Exercise08
 
 inductive Colour : Type
-  | red : colour
-  | blue : colour
-  | green : colour
+  | red : Colour
+  | blue : Colour
+  | green : Colour
 
 def horrify : ℕ × ℕ × ℕ → Colour → ℕ × ℕ × ℕ
-  | (r, b + 1, g + 1), red => (r + 2, b, g)
-  | (r + 1, b, g + 1), blue => (r, b + 2, g)
-  | (r + 1, b + 1, g), green => (r, b, g + 2)
+  | (r, b + 1, g + 1), Colour.red => (r + 2, b, g)
+  | (r + 1, b, g + 1), Colour.blue => (r, b + 2, g)
+  | (r + 1, b + 1, g), Colour.green => (r, b, g + 2)
   | (r, b, g), _ => (r, b, g)
 
 /-- Critic Ivor Smallbrain is watching the horror movie Salamanders on a
