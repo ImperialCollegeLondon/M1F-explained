@@ -1,4 +1,4 @@
-import Mathbin.Tactic.Default
+import Mathlib.Tactic
 
 namespace Chapter01.Exercise07
 
@@ -30,7 +30,7 @@ theorem part_b : ¬∀ n : ℕ, n > 0 → ∃ a b c : ℕ, n = a ^ 2 + b ^ 2 + c
   have ha := lt_three h
   have hb := lt_three (by linarith : 7 = b ^ 2 + a ^ 2 + c ^ 2)
   have hc := lt_three (by linarith : 7 = c ^ 2 + a ^ 2 + b ^ 2)
-  interval_cases <;> interval_cases <;> interval_cases <;>-- Generate 3 x 3 x 3 = 27 goals
+  interval_cases a <;> interval_cases b <;> interval_cases c <;>-- Generate 3 x 3 x 3 = 27 goals
     cases h
 
 end Chapter01.Exercise07

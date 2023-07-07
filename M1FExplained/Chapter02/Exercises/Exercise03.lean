@@ -5,8 +5,8 @@ Authors: Kevin Buzzard, Natasha Johnson
 
 ! This file was ported from Lean 3 source module chapter02.exercises.exercise03
 -/
-import Mathbin.Tactic.Default
-import Mathbin.Data.Real.Irrational
+import Mathlib.Tactic
+import Mathlib.Data.Real.Irrational
 
 namespace Chapter02.Exercise03
 
