@@ -22,4 +22,8 @@ Ex 3 : Two sorries left.
 
 Ex 4 : Two sorries left.
 
-etc etc (to be written)
+Ex 5 : One sorry left.
+
+Ex 6 : 
+
+
