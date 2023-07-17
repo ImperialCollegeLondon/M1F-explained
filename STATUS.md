@@ -48,3 +48,23 @@ Ex 1 : done
 7,8: statement not formalised
 
 9: statement formalised; proof contains a sorry
+
+## Chapters 9-12
+
+No statements have been formalised here
+
+## Chapter 13
+
+Ex 1 done
+
+2 statement formalised
+
+3 done
+
+4 statement formalised
+
+5 statement not formalised
+
+6 statement formalised
+
+7 statement formalised

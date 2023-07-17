@@ -1,4 +1,4 @@
-import Mathbin.Data.Nat.Modeq
+import Mathlib.Data.Nat.ModEq
 
 namespace Chapter13.Exercise01
 

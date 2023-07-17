@@ -1,6 +1,6 @@
-import Mathbin.Data.Int.Modeq
-import Mathbin.Data.Zmod.Algebra
-import Mathbin.Tactic.Default
+import Mathlib.Data.Int.ModEq
+import Mathlib.Data.ZMod.Algebra
+import Mathlib.Tactic
 
 namespace Chapter13.Exercise03
 
@@ -35,8 +35,7 @@ theorem part_b : ¬∃ x : ℤ, 91 * x ≡ 84 [ZMOD 143] :=
       norm_num at this 
     · norm_num
 
-theorem part_c : ¬∃ x : ℤ, x ^ 2 ≡ 2 [ZMOD 5] :=
-  by
+theorem part_c : ¬∃ x : ℤ, x ^ 2 ≡ 2 [ZMOD 5] := by
   unfold Int.ModEq
   norm_num
   by_contra'
@@ -44,21 +43,20 @@ theorem part_c : ¬∃ x : ℤ, x ^ 2 ≡ 2 [ZMOD 5] :=
   change h ^ 2 % (5 : ℕ) = 2 % (5 : ℕ) at h1 
   rw [← ZMod.int_cast_eq_int_cast_iff'] at h1 
   push_cast at h1 
-  revert h1
-  generalize (h : ZMod 5) = t
-  decide!
+  generalize (h : ZMod 5) = t at h1
+  revert t
+  decide
 
-theorem part_d : ¬∃ x : ℤ, x ^ 2 + x + 1 ≡ 0 [ZMOD 5] :=
-  by
+theorem part_d : ¬∃ x : ℤ, x ^ 2 + x + 1 ≡ 0 [ZMOD 5] := by
   unfold Int.ModEq
   by_contra'
   cases' this with h h1
   change (h ^ 2 + h + 1) % (5 : ℕ) = 0 % (5 : ℕ) at h1 
   rw [← ZMod.int_cast_eq_int_cast_iff'] at h1 
   push_cast at h1 
-  revert h1
-  generalize (h : ZMod 5) = t
-  decide!
+  generalize (h : ZMod 5) = t at h1
+  revert t
+  decide
 
 theorem part_e : ∃ x : ℤ, x ^ 2 + x + 1 ≡ 0 [ZMOD 7] :=
   by
