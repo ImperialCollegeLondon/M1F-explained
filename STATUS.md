@@ -24,6 +24,27 @@ Ex 4 : Two sorries left.
 
 Ex 5 : One sorry left.
 
-Ex 6 : 
+Ex 6 : Statement formalised. Exercise: can we write down a beautifully-commented proof to make
+this solution a "model solution"?
 
+Ex 7 : statement formalised
 
+Ex 8 : done
+
+## Chapters 3 to 7
+
+No statements have been formalised here.
+
+## Chapter 8
+
+Ex 1 : done
+
+2-4 : statement not formalised
+
+5 : done
+
+6 : have definition of Lucas sequence
+
+7,8: statement not formalised
+
+9: statement formalised; proof contains a sorry
