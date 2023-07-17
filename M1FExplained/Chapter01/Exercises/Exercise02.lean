@@ -36,13 +36,10 @@ theorem hD : D = ({0} : Set ℝ) := by
   use (0 : ℤ)
   norm_num
 
-/- ./././Mathport/Syntax/Translate/Basic.lean:638:2: warning: expanding binder collection (S
- T «expr ∈ » ({B[chapter01.exercise02.B], C[chapter01.exercise02.C], D[chapter01.exercise02.D], E[chapter01.exercise02.E]} : set[set]
- (set[set] exprℝ()))) -/
 -- Which pair of these sets has the property that neither is contained in the other?
 theorem part_a :
-    ∃ (S : Set ℝ) (hS : S ∈ ({B, C, D, E} : Set (Set ℝ))) 
-      (T : Set ℝ) (hT : T ∈ ({B, C, D, E} : Set (Set ℝ))),
+    ∃ (S : Set ℝ) (_ : S ∈ ({B, C, D, E} : Set (Set ℝ))) 
+      (T : Set ℝ) (_ : T ∈ ({B, C, D, E} : Set (Set ℝ))),
       ¬S ⊆ T ∧ ¬T ⊆ S := by
   use D, by simp, E, by simp
   constructor
