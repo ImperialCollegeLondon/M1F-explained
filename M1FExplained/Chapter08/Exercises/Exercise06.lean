@@ -1,4 +1,4 @@
-import Mathbin.Tactic.Default
+import Mathlib.Tactic
 
 namespace Chapter08.Exercise06
 
