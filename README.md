@@ -21,7 +21,7 @@ code .
 
 ## Contributors.
 
-Kevin Buzzard, Mark Zhou, Siddharth Hariharan, Katie Watson, Douhan Wang, Zhangir Azerbayev, `chrt`, Yuchen Wang, Xialu Zheng, Natasha Johnson, Adil Raza, Archie Browne.
+Kevin Buzzard, Mark Zhou, Siddharth Hariharan, Katie Watson, Douhan Wang, Zhangir Azerbayev, `chrt`, Yuchen Wang, Xialu Zheng, Natasha Johnson, Adil Raza, Archie Browne, Faris Hafizhan Hakim.
 
 ## Contributing.
 
