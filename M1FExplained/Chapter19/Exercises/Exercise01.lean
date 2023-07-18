@@ -1,9 +1,9 @@
-import Mathbin.Tactic.Default
-import Mathbin.Data.Real.Sqrt
-import Mathbin.Data.Int.Modeq
-import Mathbin.Data.Real.Irrational
-import Mathbin.Data.Nat.Factorization.PrimePow
-import Mathbin.Data.Nat.PrimeNormNum
+import Mathlib.Tactic
+import Mathlib.Data.Real.Sqrt
+import Mathlib.Data.Int.ModEq
+import Mathlib.Data.Real.Irrational
+import Mathlib.Data.Nat.Factorization.PrimePow
+import Mathlib.Data.Nat.PrimeNormNum
 
 namespace Chapter19.Exercise01
 
@@ -38,16 +38,18 @@ theorem he : Equivalence E :=
   ⟨-- reflexive
   by
     intro x
-    unfold e,-- symmetric
+    rfl,
+  -- symmetric
   by
     intro x y h
-    unfold e at *
-    exact Int.ModEq.symm h,-- transitive
+    unfold E at *
+    exact Int.ModEq.symm h,
+  -- transitive
   by
     intro x y z hxy hyz
-    unfold e at *
+    unfold E at *
     exact Int.ModEq.trans hxy hyz⟩
-
+  
 -- Let's now say that `e` is the "canonical" equivalence relation on ℤ
 instance s : Setoid ℤ :=
   ⟨E, he⟩
@@ -143,7 +145,6 @@ theorem padicValNat_two_aux (a b c : ℕ) : padicValNat 2 (2 ^ a * 3 ^ b * 5 ^ c
     replace h := Nat.Prime.dvd_of_dvd_pow Nat.prime_two h
     norm_num at h 
   all_goals try exact pow_ne_zero _ (by norm_num)
-  assumption
 
 theorem padicValNat_three_aux (a b c : ℕ) : padicValNat 3 (2 ^ a * 3 ^ b * 5 ^ c) = b :=
   by

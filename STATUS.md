@@ -68,3 +68,11 @@ Ex 1 done
 6 statement formalised
 
 7 statement formalised
+
+## Chapters 14 to 18
+
+No statements have been formalised here
+
+## Chapter 19
+
+1 
