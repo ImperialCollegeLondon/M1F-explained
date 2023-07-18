@@ -1,5 +1,5 @@
-import Mathbin.Data.Nat.Prime
-import Mathbin.Data.Int.Modeq
+import Mathlib.Data.Nat.Prime
+import Mathlib.Data.Int.ModEq
 
 namespace Chapter13.Exercise06
 

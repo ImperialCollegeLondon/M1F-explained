@@ -3,7 +3,17 @@ import Mathlib.Tactic
 
 namespace Chapter01.Exercise01
 
-theorem ZFSet.well_founded : ¬∃ α : ZFSet, α = {α} := by sorry
+theorem ZFSet.well_founded : ¬∃ α : ZFSet.{0}, α = {α} := by
+  rintro ⟨α, hα⟩
+  have hα' : α ∈ α := by 
+    nth_rewrite 2 [hα]
+    rw [ZFSet.mem_singleton] 
+  have foo : WellFounded (α := ZFSet.{0}) (· ∈ ·) := ZFSet.mem_wf
+  obtain ⟨a, haα, h⟩ := WellFounded.has_min foo {α} ⟨α, Set.mem_singleton _⟩
+  rw [Set.mem_singleton_iff] at haα
+  subst haα
+  specialize h a $ Set.mem_singleton _
+  contradiction
 
 variable (α : ZFSet.{0})
 
@@ -45,7 +55,7 @@ theorem part_b_helper' : zero ≠ one := by
   have h0 : zero ∈ zero := by
     nth_rw 2 [h]
     simp [zero, one]
-  simpa [zero] using h0
+  simp [zero] at h0
 
 /-
 I'm assuming part(b) is supposed to be false. 
