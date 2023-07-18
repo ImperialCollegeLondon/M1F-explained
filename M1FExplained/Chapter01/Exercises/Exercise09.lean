@@ -24,7 +24,7 @@ theorem part_d : ¬ ∃ x : ℤ, ∀ n : ℤ, x ≠ n + 2 := by
   use (x - 2)
   simp
 
-theorem part_e : ∀ y : ℤ, y ≥ 1 →  Prime (5 * y ^ 2 + 5 * y + 1) := by
+theorem part_e : ¬ ∀ y : ℤ, y ≥ 1 →  Prime (5 * y ^ 2 + 5 * y + 1) := by
   sorry
 
 theorem part_f : ∀ y : ℤ, y^2 < 0 → Prime (5 * y ^ 2 + 5 * y + 1) := by
