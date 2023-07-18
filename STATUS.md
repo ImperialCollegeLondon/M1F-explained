@@ -49,9 +49,15 @@ Ex 1 : done
 
 9: statement formalised; proof contains a sorry
 
-## Chapters 9-12
+## Chapter 9
 
-No statements have been formalised here
+No statements have been formalised here.
+
+## Chapter 10
+
+Ex 1 : done
+
+## Chapters 11-12
 
 ## Chapter 13
 
