@@ -50,7 +50,7 @@ theorem he : Equivalence E :=
     unfold E at *
     exact Int.ModEq.trans hxy hyz⟩
   
--- Let's now say that `e` is the "canonical" equivalence relation on ℤ
+-- Let's now say that `E` is the "canonical" equivalence relation on ℤ
 instance s : Setoid ℤ :=
   ⟨E, he⟩
 
@@ -70,7 +70,7 @@ def f6 (x : Quotient Chapter19.Exercise01.s) : Quotient Chapter19.Exercise01.s :
       exact Int.ModEq.add_right 1 hab)
     x
 
--- `injective` is actually called `function.injective` so let's open `function`
+-- `injective` is actually called `Function.injective` so let's open `function`
 open Function
 
 -- now we can just call it `injective`
@@ -122,7 +122,11 @@ theorem exercise03inj : Injective f3 := by
   rcases hab with (h1 | h2)
   · assumption
   · exfalso; suffices h : Real.sqrt 2 = -(a + b) / 2
-    · norm_cast at h ; apply irrational_sqrt_two; use -(a + b) / 2; exact h.symm
+    · norm_cast at h
+      apply irrational_sqrt_two
+      use -(a + b) / 2
+      push_cast at h ⊢
+      convert h.symm 
     · linear_combination h2 / 2
 
 theorem exercise03surj : ¬Surjective f3 := by
@@ -159,111 +163,104 @@ theorem padicValNat_three_aux (a b c : ℕ) : padicValNat 3 (2 ^ a * 3 ^ b * 5 ^
     replace h := Nat.Prime.dvd_of_dvd_pow Nat.prime_three h
     norm_num at h 
   all_goals try exact pow_ne_zero _ (by norm_num)
-  assumption
 
 theorem Nat.prime_five : Nat.Prime 5 := by norm_num
 
 theorem padicValNat_five_aux (a b c : ℕ) : padicValNat 5 (2 ^ a * 3 ^ b * 5 ^ c) = c :=
   by
-  haveI : Fact (Nat.Prime 5) := Fact.mk nat.prime_five
+  haveI : Fact (Nat.Prime 5) := Fact.mk Nat.prime_five
   rw [padicValNat.mul (mul_ne_zero _ _), padicValNat.mul, padicValNat.prime_pow,
     padicValNat.eq_zero_of_not_dvd, padicValNat.eq_zero_of_not_dvd]
   · simp
   · intro h
-    replace h := Nat.Prime.dvd_of_dvd_pow nat.prime_five h
+    replace h := Nat.Prime.dvd_of_dvd_pow Nat.prime_five h
     norm_num at h 
   · intro h
-    replace h := Nat.Prime.dvd_of_dvd_pow nat.prime_five h
+    replace h := Nat.Prime.dvd_of_dvd_pow Nat.prime_five h
     norm_num at h 
   all_goals try exact pow_ne_zero _ (by norm_num)
-  assumption
 
 theorem exercise04inj : Injective f4 :=
   by
   rintro ⟨a1, b1, c1⟩ ⟨a2, b2, c3⟩ h
-  unfold f4 at h 
+  unfold f4 at h; dsimp at h
   simp only [Prod.mk.inj_iff]
   refine' ⟨_, _, _⟩
-  · rw [← padic_val_nat_two_aux a1 b1 c1, h, padic_val_nat_two_aux]
-  · rw [← padic_val_nat_three_aux a1 b1 c1, h, padic_val_nat_three_aux]
-  · rw [← padic_val_nat_five_aux a1 b1 c1, h, padic_val_nat_five_aux]
+  · rw [← padicValNat_two_aux a1 b1 c1, h, padicValNat_two_aux]
+  · rw [← padicValNat_three_aux a1 b1 c1, h, padicValNat_three_aux]
+  · rw [← padicValNat_five_aux a1 b1 c1, h, padicValNat_five_aux]
 
 theorem Nat.prime_seven : Nat.Prime 7 := by norm_num
 
 theorem padicValNat_seven_aux (a b c : ℕ) : padicValNat 7 (2 ^ a * 3 ^ b * 5 ^ c) = 0 :=
   by
-  haveI : Fact (Nat.Prime 7) := Fact.mk nat.prime_seven
+  haveI : Fact (Nat.Prime 7) := Fact.mk Nat.prime_seven
   rw [padicValNat.mul (mul_ne_zero _ _), padicValNat.mul, padicValNat.eq_zero_of_not_dvd,
     padicValNat.eq_zero_of_not_dvd, padicValNat.eq_zero_of_not_dvd]
   · intro h
-    replace h := Nat.Prime.dvd_of_dvd_pow nat.prime_seven h
+    replace h := Nat.Prime.dvd_of_dvd_pow Nat.prime_seven h
     norm_num at h 
   · intro h
-    replace h := Nat.Prime.dvd_of_dvd_pow nat.prime_seven h
+    replace h := Nat.Prime.dvd_of_dvd_pow Nat.prime_seven h
     norm_num at h 
   · intro h
-    replace h := Nat.Prime.dvd_of_dvd_pow nat.prime_seven h
+    replace h := Nat.Prime.dvd_of_dvd_pow Nat.prime_seven h
     norm_num at h 
   all_goals try exact pow_ne_zero _ (by norm_num)
-  assumption
 
 theorem exercise04surj : ¬Surjective f4 := by
   intro h
   specialize h 7
   cases' h with x h
   rcases x with ⟨a, b, c⟩
-  unfold f4 at h 
-  have := padic_val_nat_seven_aux a b c
-  rw [h] at this 
-  simpa using this
+  dsimp [f4] at h
+  have := padicValNat_seven_aux a b c
+  simp [h] at this 
 
 theorem exercise05inj : ¬Injective f5 := by
   intro h
-  unfold injective at h 
+  unfold Injective at h 
   have hp : f5 ⟨1, 1, 1⟩ = f5 ⟨2, 2, 0⟩ := by unfold f5 at *; norm_num
   specialize h hp
-  simpa using h
+  simp at h
 
 theorem padicValNat_five_aux_ (a b c : ℕ) : padicValNat 5 (2 ^ a * 3 ^ b * 6 ^ c) = 0 :=
   by
-  haveI : Fact (Nat.Prime 5) := Fact.mk nat.prime_five
+  haveI : Fact (Nat.Prime 5) := Fact.mk Nat.prime_five
   rw [padicValNat.mul (mul_ne_zero _ _), padicValNat.mul, padicValNat.eq_zero_of_not_dvd,
     padicValNat.eq_zero_of_not_dvd, padicValNat.eq_zero_of_not_dvd]
   · intro h
-    replace h := Nat.Prime.dvd_of_dvd_pow nat.prime_five h
+    replace h := Nat.Prime.dvd_of_dvd_pow Nat.prime_five h
     norm_num at h 
   · intro h
-    replace h := Nat.Prime.dvd_of_dvd_pow nat.prime_five h
+    replace h := Nat.Prime.dvd_of_dvd_pow Nat.prime_five h
     norm_num at h 
   · intro h
-    replace h := Nat.Prime.dvd_of_dvd_pow nat.prime_five h
+    replace h := Nat.Prime.dvd_of_dvd_pow Nat.prime_five h
     norm_num at h 
   all_goals try exact pow_ne_zero _ (by norm_num)
-  assumption
 
 theorem exercise05surj : ¬Surjective f5 := by
   intro h
   specialize h 5
   cases' h with x h
   rcases x with ⟨a, b, c⟩
-  unfold f5 at h 
-  have := padic_val_nat_five_aux_ a b c
-  rw [h] at this 
-  simpa using this
+  dsimp [f5] at h 
+  have := padicValNat_five_aux_ a b c
+  simp [h] at this 
 
 theorem exercise06inj : Injective f6 := by
   intro a b hab
-  unfold f6 at hab 
   revert hab
-  apply Quotient.induction_on₂ a b
+  refine Quotient.inductionOn₂ a b ?_
   intro x y hab
-  simp [s_def] at hab 
-  rw [Quotient.eq', s_def]
+  simp [f6, s_def] at hab 
+  rw [Quotient.eq, s_def]
   convert Int.ModEq.sub_right 1 hab <;> simp
 
 theorem exercise06surj : Surjective f6 := by
   intro y
-  apply Quotient.inductionOn y
+  refine Quotient.inductionOn y ?_
   clear y
   intro a
   use ⟦a - 1⟧
