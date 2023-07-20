@@ -16,26 +16,26 @@ must be two integers such that one divides the other.
 
 ! This file was ported from Lean 3 source module chapter19.exercises.exercise05
 -/
-import Mathbin.Tactic.Default
-import Mathbin.Combinatorics.Pigeonhole
-import Mathbin.Algebra.BigOperators.Fin
-import Mathbin.Data.Int.SuccPred
-import Mathbin.Data.Int.Parity
-import Mathbin.Data.Nat.Factorization.Basic
+import Mathlib.Tactic
+import Mathlib.Combinatorics.Pigeonhole
+import Mathlib.Algebra.BigOperators.Fin
+import Mathlib.Data.Int.SuccPred
+import Mathlib.Data.Int.Parity
+import Mathlib.Data.Nat.Factorization.Basic
 
 namespace Chapter19.Exercise05
 
 open Function
 
-/- ./././Mathport/Syntax/Translate/Basic.lean:638:2: warning: expanding binder collection (a b «expr ∈ » S) -/
 theorem parta (S : Finset ℤ) (hS : S.card = 6) :
     ∃ (a : _) (_ : a ∈ S) (b : _) (_ : b ∈ S), a ≠ b ∧ (5 : ℤ) ∣ a - b :=
   by
   let f : ℤ → ℤ := fun z => z % 5
+  have f_def z : f z = z % 5 := rfl
   let T : Finset ℤ := Finset.Ico 0 5
   have hfT : ∀ z : ℤ, z ∈ S → f z ∈ T := by
-    intro z hz
-    simp only [f, Finset.mem_Ico]
+    intro z _
+    simp only [f_def, Finset.mem_Ico]
     constructor
     apply Int.emod_nonneg
     norm_num
@@ -44,27 +44,27 @@ theorem parta (S : Finset ℤ) (hS : S.card = 6) :
   have hST : T.card * 1 < S.card :=
     by
     simp only [hS, Int.card_Ico, tsub_zero, mul_one]
-    norm_num
   have := Finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hfT hST
   dsimp at this 
-  rcases this with ⟨y, Hy, H⟩
+  rcases this with ⟨y, _, H⟩
   rw [Finset.one_lt_card] at H 
   rcases H with ⟨a, ha, b, hb, H⟩
   simp only [Finset.mem_filter] at ha hb 
   use a, ha.1, b, hb.1, H
   apply Int.ModEq.dvd
   change f b = f a
-  rw [hb.2, ha.2]
+  rw [f_def, f_def, hb.2, ha.2]
 
 /- ./././Mathport/Syntax/Translate/Basic.lean:638:2: warning: expanding binder collection (a b «expr ∈ » S) -/
 theorem partb (n : ℕ) (hn : 0 < n) (S : Finset ℤ) (hS : S.card = n + 1) :
     ∃ (a : _) (_ : a ∈ S) (b : _) (_ : b ∈ S), a ≠ b ∧ (n : ℤ) ∣ a - b :=
   by
   let f : ℤ → ℤ := fun z => z % n
+  have f_def z : f z = z % n := rfl
   let T : Finset ℤ := Finset.Ico 0 n
   have hfT : ∀ z : ℤ, z ∈ S → f z ∈ T := by
-    intro z hz
-    simp only [f, Finset.mem_Ico]
+    intro z _
+    simp only [f_def, Finset.mem_Ico]
     constructor
     apply Int.emod_nonneg
     linarith
@@ -76,33 +76,33 @@ theorem partb (n : ℕ) (hn : 0 < n) (S : Finset ℤ) (hS : S.card = n + 1) :
       Nat.lt_one_iff]
   have := Finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hfT hST
   dsimp at this 
-  rcases this with ⟨y, Hy, H⟩
+  rcases this with ⟨y, _, H⟩
   rw [Finset.one_lt_card] at H 
   rcases H with ⟨a, ha, b, hb, H⟩
   simp at ha hb 
   use a, ha.1, b, hb.1, H
   apply Int.ModEq.dvd
   change f b = f a
-  rw [hb.2, ha.2]
+  rw [f_def, hb.2, f_def, ha.2]
 
-/- ./././Mathport/Syntax/Translate/Basic.lean:638:2: warning: expanding binder collection (a b «expr ∈ » s) -/
 -- A stronger of part b which should be easier to use
 -- (the point is that f might not be injective on s)
-theorem partb' {ι : Type _} {s : Finset ι} (f : ι → ℤ) (hs : s.Nonempty) {n : ℕ} (hn : 0 < n)
+theorem partb' {ι : Type _} {s : Finset ι} (f : ι → ℤ) (_ : s.Nonempty) {n : ℕ} (hn : 0 < n)
     (hs' : n < s.card) : ∃ (a : _) (_ : a ∈ s) (b : _) (_ : b ∈ s), a ≠ b ∧ (n : ℤ) ∣ f a - f b :=
   by
   let f' : ι → ℤ := fun z => f z % n
+  have f'_def (i : ι) : f' i = f i % n := rfl
   let T : Finset ℤ := Finset.Ico 0 n
   have hfT : ∀ z : ι, z ∈ s → f' z ∈ T := by
-    intro z hz
-    simp only [f', Finset.mem_Ico]
+    intro z _
+    simp only [f'_def, Finset.mem_Ico]
     have hn' : (n : ℤ) ≠ 0 := by norm_cast; exact hn.ne'
     constructor
     · exact Int.emod_nonneg _ hn'
     · convert Int.emod_lt _ hn'
       simp only [Nat.abs_cast]
   have hST : T.card * 1 < s.card := by simp [hs']
-  obtain ⟨y, hyT, hcard⟩ := Finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hfT hST
+  obtain ⟨y, _, hcard⟩ := Finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hfT hST
   rw [Finset.one_lt_card_iff] at hcard 
   rcases hcard with ⟨a, b, ha, hb, hab⟩
   rw [Finset.mem_filter] at ha hb 
@@ -110,7 +110,7 @@ theorem partb' {ι : Type _} {s : Finset ι} (f : ι → ℤ) (hs : s.Nonempty) 
   dsimp at ha hb 
   apply Int.ModEq.dvd
   change f' b = f' a
-  rw [hb.2, ha.2]
+  rw [f'_def, f'_def, hb.2, ha.2]
 
 open scoped BigOperators
 
@@ -146,26 +146,25 @@ theorem partc (n : ℕ) (hn : 0 < n) (f : ℕ → ℤ) :
     · rw [Finset.range_eq_Ico, Finset.Ico_subset_Ico_iff hab]
       exact ⟨zero_le a, hb⟩
     · rwa [Finset.nonempty_Ico]
-    · rwa [finset.sum_Ico hab.le, ← dvd_neg, neg_sub]
+    · rwa [Finset.sum_Ico hab.le, ← dvd_neg, neg_sub]
   · -- b < a case
     use Finset.Ico b a
     refine' ⟨_, _, _⟩
     · rw [Finset.range_eq_Ico, Finset.Ico_subset_Ico_iff hab]
       exact ⟨zero_le b, ha⟩
     · rwa [Finset.nonempty_Ico]
-    · rwa [finset.sum_Ico hab.le]
+    · rwa [Finset.sum_Ico hab.le]
 
 -- should be in mathlib maybe? (thanks Eric Rodriguez)
 def sum_le_max (S : Finset ℤ) (x : ℤ) (hS' : ∀ s ∈ S, s ≤ x) :
     ∑ i in S, i ≤ ∑ i in Finset.Ioc (x - Finset.card S) x, i :=
   by
   induction' h : Finset.card S with k ih generalizing S x
-  · obtain rfl := finset.card_eq_zero.mp h; simp
+  · obtain rfl := Finset.card_eq_zero.mp h; simp
   have hSn : 0 < S.card := h.symm ▸ k.succ_pos
-  replace hSn : S.nonempty := finset.card_pos.mp hSn
+  replace hSn : S.Nonempty := Finset.card_pos.mp hSn
   specialize ih (S.erase (S.max' hSn)) (x - 1) (fun s hs => _) _
   · rw [← Int.pred, ← Int.pred_eq_pred, Order.le_pred_iff]
-    obtain ⟨hs₁, hs₂⟩ := Finset.mem_erase.1 hs
     exact (S.lt_max'_of_mem_erase_max' hSn hs).trans_le (hS' _ <| S.max'_mem hSn)
   · simpa [h] using Finset.card_erase_of_mem (S.max'_mem hSn)
   have : x - 1 - k = x - k.succ := by
@@ -174,11 +173,11 @@ def sum_le_max (S : Finset ℤ) (x : ℤ) (hS' : ∀ s ∈ S, s ≤ x) :
   rw [this] at ih 
   have hSm : S.max' hSn ≤ x := hS' _ (S.max'_mem hSn)
   replace ih := add_le_add ih hSm
-  suffices Finset.Ioc (x - k.succ) (x - 1) = (Finset.Ioc (x - k.succ) x).eraseₓ x
+  suffices Finset.Ioc (x - k.succ) (x - 1) = (Finset.Ioc (x - k.succ) x).erase x
     by
     rwa [Finset.sum_erase_add _ _ <| S.max'_mem hSn, this, Finset.sum_erase_add] at ih 
     simp only [Finset.right_mem_Ioc, sub_lt_self_iff]
-    exact nat.cast_pos.mpr k.succ_pos
+    exact Nat.cast_pos.mpr k.succ_pos
   ext
   simp only [Nat.cast_succ, Finset.mem_Ioc, Finset.Ioc_erase_right, Finset.mem_Ioo,
     and_congr_right_iff]
@@ -189,7 +188,7 @@ def sum_le_max (S : Finset ℤ) (x : ℤ) (hS' : ∀ s ∈ S, s ≤ x) :
 def min_le_sum (S : Finset ℤ) (x : ℤ) (hS' : ∀ s ∈ S, x ≤ s) :
     ∑ i in Finset.Ico x (x + Finset.card S), i ≤ ∑ i in S, i :=
   by
-  have := sum_le_max (Finset.image (fun i => -i) S) (-x) _; swap
+  have := sum_le_max (Finset.image (fun i => -i) S) (-x) ?_; swap
   · intro s hs
     rw [Finset.mem_image] at hs 
     rcases hs with ⟨t, ht, rfl⟩
@@ -198,16 +197,16 @@ def min_le_sum (S : Finset ℤ) (x : ℤ) (hS' : ∀ s ∈ S, x ≤ s) :
   have Scard : (Finset.image Neg.neg S).card = S.card :=
     by
     rw [Finset.card_image_iff]
-    intro x hx y hy
+    intro x _ y _
     exact neg_inj.1
   convert this
   · rw [Finset.sum_image]
     symm
     apply Finset.sum_neg_distrib
-    intro x hx y hy h
+    intro x _ y _ h
     rwa [neg_inj] at h 
   · rw [← Finset.sum_neg_distrib]
-    apply Finset.sum_bij fun (a : ℤ) ha => -a
+    apply Finset.sum_bij fun (a : ℤ) _ => -a
     · intro a ha
       simp only [Finset.mem_Ioc, neg_le_neg_iff]
       rw [Finset.mem_Ico] at ha 
@@ -233,14 +232,12 @@ theorem partd (S : Finset ℤ) (hS : ∀ s ∈ S, (1 : ℤ) ≤ s ∧ s ≤ 50) 
   have hFP : F.card * 1 < P.card :=
     by
     simp only [Finset.card_powersetLen 5 S, hScard, Int.card_Icc, mul_one]
-    have h : (10 : ℕ).choose 5 = 252 := by rfl
-    simp only [h]
-    norm_num
   let g : Finset ℤ → ℤ := fun x => ∑ i in x, i
+  have g_def S : g S = ∑ i in S, i := rfl
   have hg : ∀ p : Finset ℤ, p ∈ P → g p ∈ F :=
     by
     intro p hp
-    simp only [g, Finset.mem_Icc]
+    simp only [g_def, Finset.mem_Icc]
     rw [Finset.mem_powersetLen] at hp 
     constructor
     · convert min_le_sum p 1 fun s hs => (hS s (hp.1 hs)).1
@@ -251,7 +248,7 @@ theorem partd (S : Finset ℤ) (hS : ∀ s ∈ S, (1 : ℤ) ≤ s ∧ s ≤ 50) 
       rfl
   have := Finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hg hFP
   dsimp at this 
-  rcases this with ⟨y, hy1, hy2⟩
+  rcases this with ⟨y, _, hy2⟩
   rw [Finset.one_lt_card] at hy2 
   rcases hy2 with ⟨A, hA, B, hB, hAB⟩
   rw [Finset.mem_filter] at hA hB 
@@ -259,7 +256,7 @@ theorem partd (S : Finset ℤ) (hS : ∀ s ∈ S, (1 : ℤ) ≤ s ∧ s ≤ 50) 
   rw [Finset.mem_powersetLen] at hA hB 
   simp [hAB, hA.1, hB.1]
   change g A = g B
-  rw [hA.2, hB.2]
+  rw [g_def, g_def, hA.2, hB.2]
 
 theorem parte (T : Finset ℤ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 50) (hTcard : T.card = 9) :
     ∃ A B : Finset ℤ, A ≤ T ∧ B ≤ T ∧ Disjoint A B ∧ ∑ i in A, i = ∑ j in B, j :=
@@ -267,7 +264,7 @@ theorem parte (T : Finset ℤ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 50) 
   -- as long as we can find two non-empty sets A, B of the same sum, we can find two disjoint set by A\B and B\A
   suffices h : ∃ C D : Finset ℤ, C ≤ T ∧ D ≤ T ∧ C ≠ D ∧ ∑ i in C, i = ∑ j in D, j
   · -- let A = C - (C ∩ D), B = D - (C ∩ D),
-    rcases h with ⟨C, D, hC, hD, hCD, h⟩
+    rcases h with ⟨C, D, hC, hD, _, h⟩
     let A : Finset ℤ := C \ D
     let B : Finset ℤ := D \ C
     refine' ⟨A, B, _⟩
@@ -300,13 +297,13 @@ theorem parte (T : Finset ℤ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 50) 
     have hPF : F.card * 1 < P.card :=
       by
       simp [Nat.card_Icc, Finset.card_powerset, hTcard]
-      norm_num
     -- find a map from P to F by summing elements in P
     let g : Finset ℤ → ℤ := fun x => ∑ i in x, i
+    have g_def S : g S = ∑ i in S, i := rfl
     have hg : ∀ p : Finset ℤ, p ∈ P → g p ∈ F :=
       by
       intro p hp
-      simp [g]
+      simp [g_def]
       rw [Finset.mem_powerset] at hp 
       constructor
       · apply Finset.sum_nonneg
@@ -321,13 +318,13 @@ theorem parte (T : Finset ℤ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 50) 
           · intro i hi; exact (hT i hi).2
     have := Finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hg hPF
     dsimp at this 
-    rcases this with ⟨y, hy1, hy2⟩
+    rcases this with ⟨y, _, hy2⟩
     rw [Finset.one_lt_card] at hy2 
     rcases hy2 with ⟨C, hC, D, hD, hCD⟩
     rw [Finset.mem_filter, Finset.mem_powerset] at hC hD 
     refine' ⟨C, D, hC.1, hD.1, hCD, _⟩
     change g C = g D
-    rw [hC.2, hD.2]
+    rw [g_def, g_def, hC.2, hD.2]
 
 theorem Nat.ord_compl_eq_dvd (a b : ℕ) (h : ord_compl[2] a = ord_compl[2] b) (ha : 0 < a)
     (hab : a < b) : a ∣ b :=
@@ -343,7 +340,6 @@ theorem Nat.ord_compl_eq_dvd (a b : ℕ) (h : ord_compl[2] a = ord_compl[2] b) (
   have had := Nat.ord_proj_dvd a 2
   have hbd := Nat.ord_proj_dvd b 2
   have haf := pow_pos h02 k1
-  have hbf := pow_pos h02 k2
   have hab : k1 ≤ k2 := by
     by_contra hc
     push_neg at hc 
@@ -357,7 +353,8 @@ theorem Nat.ord_compl_eq_dvd (a b : ℕ) (h : ord_compl[2] a = ord_compl[2] b) (
       exact ne_of_gt ha
       exact haf
     suffices b < a by linarith
-    · have hc'' : 2 ^ k2 * (b / 2 ^ k2) < 2 ^ k1 * (a / 2 ^ k1) := by rw [← h];
+    · have hc'' : 2 ^ k2 * (b / 2 ^ k2) < 2 ^ k1 * (a / 2 ^ k1) := by 
+        rw [← h]
         apply mul_lt_mul_of_pos_right hc' hak
       rw [mul_comm (2 ^ k2) (b / 2 ^ k2), Nat.div_mul_cancel] at hc'' 
       swap; exact hbd
@@ -376,7 +373,7 @@ theorem partf (T : Finset ℕ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 200)
     ∃ a b : ℕ, a ∈ T ∧ b ∈ T ∧ a ≠ b ∧ a ∣ b :=
   by
   -- claim : every t can be written as 2^k * q for which q is odd, using ord_compl[2] t
-  let Q : Finset ℕ := (Finset.Icc 1 200).filterₓ Odd
+  set Q : Finset ℕ := (Finset.Icc 1 200).filter Odd with Q_def
   have hQcard : Q.card = 100 :=
     by
     -- Show that it equals (finset.Iio 100).map \<\la n, 2 * n + 1, proof_of_injectivity_here\>
@@ -388,24 +385,24 @@ theorem partf (T : Finset ℕ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 200)
             simpa [add_left_inj, mul_eq_mul_left_iff, bit0_eq_zero, Nat.one_ne_zero,
               or_false_iff] using hab⟩ :=
       by
-      dsimp [Q]
+      dsimp [Q_def]
       rw [le_antisymm_iff]
       constructor
       · intro x hx
         simp only [Finset.mem_map, Finset.mem_Iio, Function.Embedding.coeFn_mk, exists_prop,
           Nat.one_le_cast, Finset.mem_filter, Finset.mem_Icc, Nat.odd_iff_not_even] at hx ⊢
         refine' ⟨(x - 1) / 2, _, _⟩
-        · rcases hx with ⟨⟨h1, h2⟩, h3⟩
+        · rcases hx with ⟨⟨h1, h2⟩, _⟩
           zify at h2 ⊢
-          rw [Int.ediv_lt_iff_lt_mul]
+          rw [Int.ediv_lt_iff_lt_mul (by linarith), Nat.cast_sub h1]
+          push_cast
           linarith
-          norm_num
-        · rcases hx with ⟨⟨h1, h2⟩, h3⟩
+        · rcases hx with ⟨_, h3⟩
           rw [← Nat.odd_iff_not_even] at h3 
           unfold Odd at h3 
           cases' h3 with k h3
           rw [h3]
-          simp only [Nat.add_succ_sub_one, add_zero, Nat.mul_div_right, Nat.succ_pos']
+          simp
       · intro x hx
         simp only [Finset.mem_map, Finset.mem_Iio, Function.Embedding.coeFn_mk, exists_prop,
           Nat.one_le_cast, Finset.mem_filter, Finset.mem_Icc, Nat.odd_iff_not_even] at hx ⊢
@@ -417,15 +414,16 @@ theorem partf (T : Finset ℕ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 200)
           linarith
         · intro h
           rw [Nat.even_iff, ← h2, Nat.mul_comm, Nat.mul_add_mod a 2 1] at h 
-          simpa [Nat.one_mod, Nat.one_ne_zero] using h
+          simp [Nat.one_mod, Nat.one_ne_zero] at h
     rw [hQ]
     simp only [Nat.card_Iio, Finset.card_map]
   have hTO : Q.card * 1 < T.card := by rw [hQcard, hTcard]; norm_num
   -- find a map from T to Q, by considering corresponding 'q'
   let f : ℕ → ℕ := fun z => ord_compl[2] z
+  have f_def z : f z = ord_compl[2] z := rfl
   have hf : ∀ t ∈ T, f t ∈ Q := by
     intro t ht
-    simp only [f, Finset.mem_filter, Finset.mem_Icc, Nat.odd_iff_not_even]
+    simp only [f_def, Finset.mem_filter, Finset.mem_Icc, Nat.odd_iff_not_even]
     have ht0 : t ≠ 0 := by
       specialize hT t ht
       cases' hT with hT1 hT2
@@ -441,7 +439,7 @@ theorem partf (T : Finset ℕ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 200)
     · simp only [even_iff_two_dvd, Nat.not_dvd_ord_compl Nat.prime_two ht0, not_false_iff]
   have := Finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hf hTO
   dsimp at this 
-  rcases this with ⟨y, hy1, hy2⟩
+  rcases this with ⟨y, _, hy2⟩
   rw [Finset.one_lt_card] at hy2 
   rcases hy2 with ⟨a, ha, b, hb, hab⟩
   by_cases a < b
@@ -454,12 +452,12 @@ theorem partf (T : Finset ℕ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 200)
       cases' hT with h1 h2
       linarith
     suffices f a = f b by
-      apply nat.ord_compl_eq_dvd
+      apply Nat.ord_compl_eq_dvd
       exact this
       exact ha0
       exact h
-    · rw [ha.2, hb.2]
-  · have h : b < a := by omega
+    · rw [f_def, f_def, ha.2, hb.2]
+  · have h : b < a := lt_of_le_of_ne' (Iff.mp Nat.not_lt h) hab--linarith [hab]
     refine' ⟨b, a, _⟩
     simp only [Ne.symm hab, Ne.def, not_false_iff, true_and_iff]
     rw [Finset.mem_filter] at ha hb 
@@ -469,11 +467,11 @@ theorem partf (T : Finset ℕ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 200)
       cases' hT with h1 h2
       linarith
     suffices f b = f a by
-      apply nat.ord_compl_eq_dvd
+      apply Nat.ord_compl_eq_dvd
       exact this
       exact hb0
       exact h
-    · rw [ha.2, hb.2]
+    · rw [f_def, f_def, ha.2, hb.2]
 
 end Chapter19.Exercise05
 
