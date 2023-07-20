@@ -1,4 +1,4 @@
-import Mathbin.Topology.Instances.Real
+import Mathlib
 
 namespace Chapter23.Exercise04
 
@@ -13,14 +13,14 @@ theorem part_i_c (n : ℕ) : (n : ℝ) ^ 3 / (n ^ 3 - 1) ≥ (n + 1) ^ 3 / ((n +
 theorem part_i_d (a : ℕ → ℝ) (h : ∀ n : ℕ, a n = n ^ 3 / (n ^ 3 - 1)) :
     ∃ l : ℝ, Tendsto a atTop (𝓝 l) := by sorry
 
-theorem part_ii_a : ∃ M : ℝ, ∀ m : ℕ, abs (2 ^ (1 / m)) ≤ M := by sorry
+theorem part_ii_a : ∃ M : ℝ, ∀ m : ℕ, abs ((2 : ℝ) ^ (1 / (m : ℝ))) ≤ M := by sorry
 
 theorem part_ii_c (n : ℕ) : 2 ^ (1 / n) ≥ 2 ^ (1 / (n + 1)) := by sorry
 
 theorem part_ii_d (a : ℕ → ℝ) (h : ∀ n : ℕ, a n = 2 ^ (1 / n)) : ∃ l : ℝ, Tendsto a atTop (𝓝 l) :=
   by sorry
 
-theorem part_iii_a : ∃ b : ℝ, ∀ n : ℕ, abs (1 - (-1) ^ n / ↑n) ≤ b := by sorry
+theorem part_iii_a : ∃ b : ℝ, ∀ n : ℕ, abs (1 - (-1 : ℤ) ^ n / ↑n) ≤ b := by sorry
 
 theorem part_iii_b (n : ℕ) : ¬∀ n : ℕ, (1 : ℝ) - (-1) ^ n / n ≤ 1 - (-1) ^ (n + 1) / (n + 1) := by
   sorry
