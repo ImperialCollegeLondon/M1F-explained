@@ -94,5 +94,5 @@ ex 1 parts a-c done, part d the statement is formalised but no proof
 
 ## Chapter 23
 
-Q1 statements formalised
+Q1-9 statements formalised, no proofs
 
