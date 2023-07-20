@@ -5,9 +5,9 @@ Authors: Kevin Buzzard, Yuchen Wang
 
 ! This file was ported from Lean 3 source module chapter22.exercise01
 -/
-import Mathbin.Data.Real.Basic
-import Mathbin.Analysis.Normed.Field.UnitBall
-import Mathbin.Data.Real.Sqrt
+import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.Normed.Field.UnitBall
+import Mathlib.Data.Real.Sqrt
 
 namespace Chapter22.Exercise01
 
@@ -31,18 +31,7 @@ theorem part_a_ub : ∃ z : ℝ, z ∈ upperBounds si :=
   use 7
   rw [upperBounds]
   intro t
-  intro h
-  cases h
-  · rw [h]
-    norm_num
-  cases h
-  · rw [h]
-    norm_num
-  cases h
-  · rw [h]
-  simp at h 
-  rw [h]
-  norm_num
+  rintro (rfl | rfl | rfl | rfl) <;> norm_num 
 
 -- 7 is the least upper bound.
 theorem part_a_lub : IsLUB si 7 := by
@@ -51,24 +40,14 @@ theorem part_a_lub : IsLUB si 7 := by
   · rw [upperBounds]
     intro t
     intro h
-    cases h
-    · rw [h]
-      norm_num
-    cases h
-    · rw [h]
-      norm_num
-    cases h
-    · rw [h]
-    simp at h 
-    rw [h]
-    norm_num
+    rcases h with (rfl | rfl | rfl | rfl) <;> norm_num
   rw [lowerBounds]
   intro n
   intro h
   rw [upperBounds] at h 
   simp at h 
   apply h
-  unfold Si
+  unfold si
   simp
 
 -- Si is bounded below.
@@ -78,17 +57,7 @@ theorem part_a_lb : ∃ z : ℝ, z ∈ lowerBounds si :=
   rw [lowerBounds]
   intro t
   intro h
-  cases h
-  · rw [h]
-    norm_num
-  cases h
-  · rw [h]
-    norm_num
-  cases h
-  · rw [h]
-    norm_num
-  simp at h 
-  rw [h]
+  rcases h with (rfl | rfl | rfl | rfl) <;> norm_num
 
 -- -2 is the greatest lower bound.
 theorem part_a_glb : IsGLB si (-2) := by
@@ -96,25 +65,14 @@ theorem part_a_glb : IsGLB si (-2) := by
   constructor
   · rw [lowerBounds]
     intro t
-    intro h
-    cases h
-    · rw [h]
-      norm_num
-    cases h
-    · rw [h]
-      norm_num
-    cases h
-    · rw [h]
-      norm_num
-    simp at h 
-    rw [h]
+    rintro (rfl | rfl | rfl | rfl) <;> norm_num
   rw [upperBounds]
   intro n
   intro h
   rw [lowerBounds] at h 
   simp at h 
   apply h
-  unfold Si
+  unfold si
   simp
 
 def sii : Set ℝ :=
@@ -130,7 +88,7 @@ theorem part_b_ub : ¬∃ z : ℝ, z ∈ upperBounds sii :=
   by_cases h : n ≤ 3
   · use 4
     constructor
-    · unfold Sii
+    · unfold sii
       simp
       norm_num
       rw [abs_of_pos]
@@ -139,7 +97,7 @@ theorem part_b_ub : ¬∃ z : ℝ, z ∈ upperBounds sii :=
     · linarith
   use n + 1
   constructor
-  · unfold Sii
+  · unfold sii
     simp
     rw [abs_of_pos]
     · rw [abs_of_pos]
@@ -159,7 +117,7 @@ theorem part_b_lb : ∃ z : ℝ, z ∈ lowerBounds sii :=
   simp
   intro t
   intro h
-  unfold Sii at h 
+  unfold sii at h 
   simp at h 
   by_cases h1 : t < -7
   rw [abs_of_neg] at h 
@@ -181,60 +139,54 @@ theorem part_b_glb : IsGLB sii (-2) := by
   rw [IsGLB]
   rw [IsGreatest]
   constructor
-  rw [lowerBounds]
-  simp
-  intro t
-  intro h
-  unfold Sii at h 
-  simp at h 
-  by_cases h1 : t < -7
-  rw [abs_of_neg] at h 
-  rw [abs_of_neg] at h 
-  linarith
-  linarith
-  linarith
-  by_cases h2 : t ≥ 3
-  linarith
-  rw [abs_of_neg] at h 
-  rw [abs_of_nonneg] at h 
-  linarith
-  push_neg at h1 
-  linarith
-  linarith
+  · rw [lowerBounds]
+    simp
+    intro t
+    intro h
+    unfold sii at h 
+    simp at h 
+    by_cases h1 : t < -7
+    · rw [abs_of_neg] at h 
+      · rw [abs_of_neg] at h <;> linarith
+      · linarith
+    · by_cases h2 : t ≥ 3
+      · linarith
+      · rw [abs_of_neg] at h 
+        · rw [abs_of_nonneg] at h 
+          · linarith
+          · push_neg at h1 
+            linarith
+        · linarith
   rw [upperBounds]
   simp
   intro n
   intro h
   rw [lowerBounds] at h 
   simp at h 
-  unfold Sii at h 
+  unfold sii at h 
   by_contra h1
   push_neg at h1 
   by_cases p : n ≤ -1
-  let t := n + 2
-  have ht : -2 + t = n
-  simp [t]
-  let k := -2 + t / 2
-  have l1 : n ≤ k
-  apply h
-  simp [k]
-  rw [abs_of_neg]
-  rw [abs_of_pos]
-  linarith
-  linarith
-  linarith
-  simp [k] at l1 
-  linarith
-  push_neg at p 
-  have l : n ≤ -1
-  apply h
-  simp
-  rw [abs_of_neg]
-  rw [abs_of_pos]
-  linarith
-  linarith
-  linarith
-  linarith
+  · let t := n + 2
+    set k := -2 + t / 2 with k_def
+    have l1 : n ≤ k
+    · apply h
+      simp [k_def]
+      rw [abs_of_neg]
+      · rw [abs_of_pos] <;> linarith
+      · linarith
+    simp [k_def] at l1 
+    linarith
+  · push_neg at p 
+    have l : n ≤ -1
+    · apply h
+      simp
+      rw [abs_of_neg]
+      · rw [abs_of_pos]
+        · linarith
+        · linarith
+      · linarith
+    · linarith
 
 def siii : Set ℝ :=
   {x | x ^ 3 - 3 * x < 0}
@@ -247,7 +199,7 @@ theorem part_c_ub : ∃ z : ℝ, z ∈ upperBounds siii :=
   simp
   intro n
   intro h
-  unfold Siii at h 
+  unfold siii at h 
   simp at h 
   by_cases p : 0 < n
   have l := div_lt_div_of_lt p h
@@ -288,7 +240,7 @@ theorem part_c_lemma1 : Real.sqrt 3 ∈ upperBounds siii :=
   simp
   intro n
   intro h
-  unfold Siii at h 
+  unfold siii at h 
   simp at h 
   by_cases p : 0 < n
   have l := div_lt_div_of_lt p h
@@ -334,22 +286,22 @@ theorem part_c_lub : IsLUB siii (Real.sqrt 3) :=
   intro n
   intro h1
   rw [upperBounds] at h1 
-  unfold Siii at h1 
+  unfold siii at h1 
   simp at h1 
-  by_contra
+  by_contra h
   push_neg at h 
   by_cases p : (3 / 2 : ℝ) ≤ n
-  let t := Real.sqrt 3 - n
+  set t := Real.sqrt 3 - n with t_def
   have ht : Real.sqrt 3 - t = n
-  simp [t]
-  let k := Real.sqrt 3 - t / 2
+  simp [t_def]
+  set k := Real.sqrt 3 - t / 2 with k_def
   have l : k ^ 3 < 3 * k
   have l2 : 0 < k
-  simp [k]
-  simp [t]
+  simp [k_def]
+  simp [t_def]
   linarith
   have l3 : k ^ 2 < 3
-  simp [k]
+  simp [k_def]
   rw [sub_sq]
   rw [Real.sq_sqrt]
   have l4 : Real.sqrt 3 ≤ Real.sqrt 4
@@ -363,7 +315,7 @@ theorem part_c_lub : IsLUB siii (Real.sqrt 3) :=
   norm_num
   rw [Real.sqrt_mul_self l7] at l4 
   have l8 : t / 2 < 1
-  simp [t]
+  simp [t_def]
   linarith
   rw [sq]
   have l9 : 0 < Real.sqrt 3
@@ -391,7 +343,7 @@ theorem part_c_lub : IsLUB siii (Real.sqrt 3) :=
   have h3 : n < k
   have h4 : 0 < t
   linarith
-  simp [k]
+  simp [k_def]
   rw [← ht]
   linarith
   linarith
@@ -411,14 +363,14 @@ theorem part_c_lb : ¬∃ z : ℝ, z ∈ lowerBounds siii :=
   by_cases h : -2 < n
   use -2
   constructor
-  unfold Siii
+  unfold siii
   simp
   linarith
   exact h
   push_neg at h 
   use n - 1
   constructor
-  unfold Siii
+  unfold siii
   simp
   have k : 1 + 2 = 3
   norm_num
@@ -446,7 +398,7 @@ theorem part_c_lb : ¬∃ z : ℝ, z ∈ lowerBounds siii :=
   linarith
 
 def siv : Set ℝ :=
-  {x | ∃ a b : PNat, x = a ^ 2 + b ^ 2}
+  {x | ∃ a b : ℕ+, x = (a ^ 2 + b ^ 2 : ℕ+)}
 
 theorem part_d_ub : ∃ z : ℝ, z ∈ upperBounds siv := by sorry
 

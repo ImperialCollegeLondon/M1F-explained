@@ -84,3 +84,11 @@ No statements have been formalised here
 7 done
 8 done
 
+## Chapters 20 and 21
+
+Nothing formalised
+
+## Chapter 22
+
+ex 1 parts a-c done, part d the statement is formalised but no proof
+
