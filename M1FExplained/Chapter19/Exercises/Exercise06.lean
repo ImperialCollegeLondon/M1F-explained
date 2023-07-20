@@ -4,8 +4,8 @@
 
 ! This file was ported from Lean 3 source module chapter19.exercises.exercise06
 -/
-import Mathbin.Tactic.Default
-import Mathbin.Data.Nat.Parity
+import Mathlib.Tactic
+import Mathlib.Data.Nat.Parity
 
 namespace Chapter19.Exercise06
 
@@ -22,8 +22,9 @@ theorem f_surj : Surjective f := by
     unfold f
     split_ifs
     · exfalso
-      rw [int.coe_nat_dvd_left.symm] at h 
-      simp only [Int.ofNat_bit0, Nat.cast_one, neg_mul] at h 
+      rename_i h
+      rw [Int.coe_nat_dvd_left.symm] at h 
+      simp only [Nat.cast_one, neg_mul] at h 
       rw [show -(2 * z) - 1 = 2 * (-z - 1) + 1 by ring] at h 
       rw [dvd_add_right] at h 
       norm_num at h 
@@ -37,6 +38,7 @@ theorem f_surj : Surjective f := by
     split_ifs
     simp [Int.zero_div]
     exfalso
+    rename_i h
     norm_num at h 
   · use (2 * z).natAbs
     unfold f
@@ -46,6 +48,7 @@ theorem f_surj : Surjective f := by
       rw [Int.natAbs_of_nonneg (show 2 * z ≥ 0 by linarith)]
       ring
     exfalso
+    rename_i h
     apply h
     rw [← Int.coe_nat_dvd_left]
     norm_num
@@ -58,7 +61,7 @@ theorem g_inj : Injective g := by
   intro a b hab
   rcases Nat.even_or_odd (g a) with (h1 | h2)
   · have ha : 0 < a := by
-      by_contra
+      by_contra h
       push_neg at h 
       unfold g at h1 
       rw [if_neg h.not_lt, even_iff_two_dvd, Nat.dvd_add_right] at h1 
@@ -66,7 +69,7 @@ theorem g_inj : Injective g := by
       apply dvd_mul_right
     have hgb : Even (g b) := by rw [← hab]; exact h1
     have hb : 0 < b := by
-      by_contra
+      by_contra h
       push_neg at h 
       unfold g at hgb 
       rw [if_neg h.not_lt, even_iff_two_dvd, Nat.dvd_add_right] at hgb 
@@ -78,7 +81,7 @@ theorem g_inj : Injective g := by
     zify at hab 
     rwa [abs_of_nonneg ha.le, abs_of_nonneg hb.le] at hab 
   · have ha : a ≤ 0 := by
-      by_contra
+      by_contra h
       push_neg at h 
       unfold g at h2 
       rw [if_pos h, Nat.odd_iff_not_even] at h2 
@@ -87,7 +90,7 @@ theorem g_inj : Injective g := by
       apply dvd_mul_right
     have hgb : Odd (g b) := by rw [← hab]; exact h2
     have hb : b ≤ 0 := by
-      by_contra
+      by_contra h
       push_neg at h 
       unfold g at hgb 
       rw [if_pos h, Nat.odd_iff_not_even] at hgb 
