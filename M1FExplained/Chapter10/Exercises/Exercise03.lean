@@ -65,10 +65,10 @@ at any even hour on some day. Similarly if a train leaves at 11, it is possible 
 at any odd hour.
 -/
 
-lemma part_c_i (y : ℕ) (hy : 24 > y) (yeven : Even y) : ∃ (m : ℕ), 12 + 14 * m ≡ y [MOD 24] := by sorry
+lemma part_c_i (t y : ℕ) (h : 24 > t ∧ 24 > y) (hpara : Even t ∧ Even y) : ∃ (m : ℕ), t + 14 * m ≡ y [MOD 24] := by sorry
 
 
-lemma part_c_ii (y : ℕ) (hy : 24 > y) (yodd : Odd y) : ∃ (m : ℕ), 11 + 14 * m ≡ y [MOD 24] := by sorry
+lemma part_c_ii (t y : ℕ) (h : 24 > y ∧ 24 > t) (hpara : Odd t ∧ Even y) : ¬∃ (m : ℕ), t + 14 * m ≡ y [MOD 24] := by sorry
 
 
 
