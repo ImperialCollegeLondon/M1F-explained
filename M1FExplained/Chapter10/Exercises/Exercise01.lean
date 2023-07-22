@@ -2,16 +2,20 @@ import Mathlib.Tactic
 
 namespace Chapter10.Exercise01
 
-/- Lean can find the answers to this exercise 
-by itself easily with the following: -/
+/- 
+Lean can find the answers to this exercise 
+by itself easily with the following: 
+-/
 
 #eval Nat.gcd 17 29 -- 1
 #eval Nat.gcdA 17 29 -- 12
 #eval Nat.gcdB 17 29 -- -7
 
-/- The intended solution however, is to apply the Euclidian Algorithm. 
+/- 
+The intended solution however, is to apply the Euclidian Algorithm. 
 We can show the process with `have`'s, but note this is purley for illustration:
-`norm_num` would instantly prove all parts of this question. -/
+`norm_num` would instantly prove all parts of this question. 
+-/
 
 
 lemma part_i_a : Nat.gcd 17 29 = 1 := by
@@ -23,7 +27,7 @@ lemma part_i_a : Nat.gcd 17 29 = 1 := by
   norm_num
 
 
-/- Finding two integers s,t such that 1 = s * 17 + t * 29. -/
+-- Finding two integers s,t such that 1 = s * 17 + t * 29.
 lemma part_i_b : 1 = 12 * 17 - 7 * 29  := by
   calc
     1 = 5 - 2 * 2                  := by norm_num
@@ -35,7 +39,7 @@ lemma part_i_b : 1 = 12 * 17 - 7 * 29  := by
     _ = 12 * 17 - 7 * 29           := by norm_num
 
 
-/- Parts ii, iii follow in exactly the same way .-/
+-- Parts ii, iii follow in exactly the same way.
 #eval Nat.gcd 713 552 -- 23
 #eval Nat.gcdA 713 552 -- 7
 #eval Nat.gcdB 713 552 -- -9
