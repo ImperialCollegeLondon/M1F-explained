@@ -47,7 +47,7 @@ lemma part_c (x y m : ℤ) (hx : Int.gcd x m = 1) (hy : Int.gcd y m = 1) : Int.g
       1 = 1 * 1 := by norm_num
       _ = (x * a + m * b) * (y * c + m * d) := by nth_rewrite 1 [hxm]; rw [hym]
       _ = x * a * y * c + x * a * m * d + m * b * y * c + m * b * m * d := by ring
-      _ = x * y * a * c + m * (x * a * d + b * y * c + m * b * d) := by ring
+      _ = x * y * a * c + (x * a * d + b * y * c + m * b * d) * m := by ring
   /- Need lemma saying that if ∃ s, t : a * s * b * t = 1, then gcd(a, b) = 1, this is Q4C -/
   sorry
 
