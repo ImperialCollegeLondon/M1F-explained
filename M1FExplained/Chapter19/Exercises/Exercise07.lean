@@ -6,8 +6,8 @@ tions from S to T is equal to n(n − 1)(n − 2) · · ·(n − m + 1).
 
 ! This file was ported from Lean 3 source module chapter19.exercises.exercise07
 -/
-import Mathbin.Tactic.Default
-import Mathbin.Data.Fintype.CardEmbedding
+import Mathlib.Tactic
+import Mathlib.Data.Fintype.CardEmbedding
 
 namespace Chapter19.Exercise07
 
@@ -18,7 +18,6 @@ theorem parta (S T : Type) [Fintype S] [Fintype T] (hS : Fintype.card S = 3)
     (hT : Fintype.card T = 5) : Fintype.card (S → T) = 125 :=
   by
   simp [Fintype.card_fun, hS, hT]
-  norm_num
 
 -- replace 37 with the right number
 theorem parta' (S T : Type) [Fintype S] [Fintype T] (hS : Fintype.card S = 3)
@@ -29,9 +28,11 @@ theorem parta' (S T : Type) [Fintype S] [Fintype T] (hS : Fintype.card S = 3)
     apply Fintype.card_congr
     exact Equiv.subtypeInjectiveEquivEmbedding S T
   rw [h]
-  simpa [Fintype.card_embedding_eq, hS, hT]
+  simp [Fintype.card_embedding_eq, hS, hT]
 
 open scoped BigOperators
+
+@[simp] lemma Nat.add_add_tsub {a b c : ℕ} : a + b + c - a = b + c := by simp [add_assoc]
 
 -- for Π
 theorem partb (S T : Type) [Fintype S] [Fintype T] (m n : ℕ) (hmn : m ≤ n) (hS : Fintype.card S = m)
@@ -44,8 +45,8 @@ theorem partb (S T : Type) [Fintype S] [Fintype T] (m n : ℕ) (hmn : m ≤ n) (
     exact Equiv.subtypeInjectiveEquivEmbedding S T
   rw [h]
   simp [Fintype.card_embedding_eq, hS, hT]
-  clear hS hT h _inst_1 _inst_2
-  induction m
+  clear hS hT h
+  induction' m with m_n m_ih
   simp
   have hm : m_n ≤ n := Nat.le_of_succ_le hmn
   specialize m_ih hm
@@ -54,13 +55,20 @@ theorem partb (S T : Type) [Fintype S] [Fintype T] (m n : ℕ) (hmn : m ≤ n) (
     by
     ext c
     constructor
+    change m_n + 1 ≤ n at hmn
     · intro hc
       simp at *
       cases' hc with hc1 hc2
       · subst hc1
         simp
+        rw [le_iff_exists_add] at hmn
+        rcases hmn with ⟨c, rfl⟩
+        simp
         linarith
       · simp [hc2]
+        rw [le_iff_exists_add] at hmn
+        rcases hmn with ⟨d, rfl⟩
+        simp_all
         linarith [hc2.1]
     · intro hc
       simp at *
@@ -71,6 +79,10 @@ theorem partb (S T : Type) [Fintype S] [Fintype T] (m n : ℕ) (hmn : m ≤ n) (
         exact h
       · push_neg at h 
         left
+        change m_n + 1 ≤ n at hmn
+        rw [le_iff_exists_add] at hmn
+        rcases hmn with ⟨d, rfl⟩
+        simp_all
         linarith
   rw [← p]
   simp

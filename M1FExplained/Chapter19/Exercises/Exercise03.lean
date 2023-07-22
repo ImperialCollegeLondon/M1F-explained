@@ -1,5 +1,5 @@
-import Mathbin.Tactic.Default
-import Mathbin.Data.Real.Basic
+import Mathlib.Tactic
+import Mathlib.Data.Real.Basic
 
 namespace Chapter19.Exercise03
 
@@ -19,7 +19,8 @@ example (f : ℝ → ℝ) : (g ∘ f = fun x => x ^ 2 - 3 * x + 5) ↔ ∀ x, f 
   have h' : f x ^ 2 + f x + 3 = x ^ 2 - 3 * x + 5 ↔ (f x - (x - 2)) * (f x - (-x + 1)) = 0 := by
     constructor <;> intro h <;> nlinarith
   rw [h', mul_eq_zero]
-  congr 2 <;> simp [sub_eq_zero]
+  congr 2
+  simp [sub_eq_zero]
 
 end Chapter19.Exercise03
 

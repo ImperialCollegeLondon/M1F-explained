@@ -8,7 +8,7 @@ or a counterexample.
 
 ! This file was ported from Lean 3 source module chapter19.exercises.exercise04
 -/
-import Mathbin.Tactic.Default
+import Mathlib.Tactic
 
 namespace Chapter19.Exercise04
 
@@ -41,12 +41,11 @@ def g : Y → Z
 
 theorem parta : ¬∀ (X Y Z : Type) (f : X → Y) (g : Y → Z), Surjective (g ∘ f) → Surjective f :=
   by
-  by_contra
+  by_contra h
   specialize h X Y Z f g
-  have hgf : surjective (g ∘ f) := by
+  have hgf : Surjective (g ∘ f) := by
     rintro ⟨⟩
     use X.a
-    rfl
   obtain ⟨⟨⟩, ⟨⟩⟩ := h hgf Y.c
 
 theorem partb : ∀ (X Y Z : Type) (f : X → Y) (g : Y → Z), Surjective (g ∘ f) → Surjective g :=
@@ -68,12 +67,12 @@ theorem partc : ∀ (X Y Z : Type) (f : X → Y) (g : Y → Z), Injective (g ∘
 
 theorem partd : ¬∀ (X Y Z : Type) (f : X → Y) (g : Y → Z), Injective (g ∘ f) → Injective g :=
   by
-  by_contra
+  by_contra h
   specialize h X Y Z f g
   specialize h gf_injective
-  have hy : g Y.b = g Y.c := by unfold g
+  have hy : g Y.b = g Y.c := by dsimp only [g]
   specialize h hy
-  simpa using h
+  simp at h
 
 end Chapter19.Exercise04
 

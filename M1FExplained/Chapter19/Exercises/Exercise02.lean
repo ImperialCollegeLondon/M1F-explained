@@ -1,5 +1,5 @@
-import Mathbin.Data.Real.Basic
-import Mathbin.Tactic.Default
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
 
 namespace Chapter19.Exercise02
 
@@ -24,20 +24,44 @@ example (x : ℝ) :
   by
   -- replace with formula for g ∘ f
   change g (f x) = _
+  have foo : (0 : ℝ) < 2⁻¹ := by norm_num -- handy to have around 
   unfold f
   unfold g
-  split_ifs <;> try simp <;> try rw [not_and_or] at * <;> try cases h <;> try cases h_1 <;>
-        try cases h_2 <;>
-      try cases h_3 <;>
-    try linarith
-
+  split_ifs
+  · ring
+  · linarith
+  · simp_all 
+  · exfalso
+    rename_i h1 h2 h3
+    apply h2
+    constructor <;> linarith
+  · rfl
+  · simp_all
+  · rename_i h1 h2 h3
+    exfalso
+    apply h1
+    constructor <;> linarith
+  · simp_all [-foo]
+    linarith 
+  . simp_all
+  · simp_all
+  · simp_all
+  · simp_all   
+  
 example (x : ℝ) : (f ∘ g) x = if 0 ≤ x ∧ x ≤ 1 then 2 * x ^ 2 else 0 :=
   by
   change f (g x) = _
   unfold f
   unfold g
-  split_ifs <;> try simp <;> try rw [not_and_or] at * <;> try cases h <;> try cases h_1 <;>
-    try nlinarith
+  split_ifs
+  · rfl
+  · rename_i h1 h2
+    exfalso ; apply h2
+    constructor <;> nlinarith
+  · norm_num
+  · aesop
 
+end -- noncomputable
+    
 end Chapter19.Exercise02
 

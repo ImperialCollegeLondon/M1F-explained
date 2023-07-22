@@ -1,6 +1,6 @@
-import Mathbin.Topology.Instances.Real
-import Mathbin.Data.Complex.Exponential
-import Mathbin.Data.Real.Irrational
+import Mathlib.Topology.Instances.Real
+import Mathlib.Data.Complex.Exponential
+import Mathlib.Data.Real.Irrational
 
 namespace Chapter23.Exercise08
 
