@@ -34,8 +34,4 @@ Part b asks us to find such s and t for the examples in exercise 01, Lean provid
 -- So 23 = 7 * 299 - 6 * 345, giving s = 7, t = 6
 
 
-
-
-
-
 end Chapter10.Exercise02
