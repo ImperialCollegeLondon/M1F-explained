@@ -49,6 +49,7 @@ looking for the first such n so that 24 * n is a multiple of 7, since the train
 leaves every 7 hours. Clearly this is 7, so Olga sees her nephew once a week.
 -/
 
+
 lemma part_b : Nat.lcm 24 7 = 24 * 7 := by norm_num
 
 -- part c
@@ -68,6 +69,7 @@ lemma part_c_i (y : ℕ) (hy : 24 > y) (yeven : Even y) : ∃ (m : ℕ), 12 + 14
 
 
 lemma part_c_ii (y : ℕ) (hy : 24 > y) (yodd : Odd y) : ∃ (m : ℕ), 11 + 14 * m ≡ y [MOD 24] := by sorry
+
 
 
 
