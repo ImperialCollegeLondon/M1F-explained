@@ -14,7 +14,7 @@ Show that some days it is possible to catch this train at 9:00 am
 Given that the train leaves at x o'clock on some day, we wish 
 to show that it is possible for it to leave at 9:00 am eventually.
 i.e there is some multiple of 7 we can add to x so that it is 
-congrueng to 9 modulo 24. 
+congruent to 9 modulo 24. 
 
 (Since the train leaves every 7 hours and we are using 24 hour time) 
 -/
