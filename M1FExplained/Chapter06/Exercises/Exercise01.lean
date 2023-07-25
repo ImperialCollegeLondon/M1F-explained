@@ -14,23 +14,40 @@ open Complex
 --Part (e) u(vw) = (uv)w for all u,v,w ∈ ℂ.
 
 --All exercises share a common theme, so I will simplify solutions
---for (a), (c), and (d) and provide comprehensive solutions for (b) and (d).
+--for (c), (d), and (e) and provide comprehensive solutions for (a) and (b).
 
 
---Prove the equality by separately expanding and rewriting
---both the imaginary and real parts.
+--Prove the equality by expanding the definition of complex number 
+--and rewriting both the imaginary and real parts.
 
 theorem part_a : ∀ (u v : ℂ), u + v = v + u := by
   intro u v
-  ext <;> simp <;> linarith
+  ext
+  · calc
+      (u + v).re = v.re + u.re := by
+        rw [add_re, add_comm]
+      _ = (v + u).re := by
+        rw [← add_re]
+  · calc
+      (u + v).im = v.im + u.im := by
+        rw [add_im, add_comm]
+      _ = (v + u).im := by
+        rw [← add_im]
 
 theorem part_b : ∀ (u v : ℂ), u * v = v * u := by
   intro u v
   ext
-  · rw [mul_re, mul_re]
-    linarith
-  · rw [mul_im, mul_im]
-    linarith
+  · calc
+      (u * v).re = v.re * u.re - v.im * u.im:= by 
+        rw[mul_re u v, mul_comm, mul_comm v.im]
+      _ = (v * u).re := by
+        rw[← mul_re]
+  · calc
+      (u * v).im = v.re * u.im + v.im * u.re:= by 
+        rw[mul_im u v, add_comm, mul_comm, mul_comm u.re]
+      _ = (v * u).im := by
+        rw[← mul_im]
+
 
 theorem part_c : ∀ (u v w: ℂ), (u + v) + w = u + (v + w) := by
   intro u v w
@@ -38,13 +55,7 @@ theorem part_c : ∀ (u v w: ℂ), (u + v) + w = u + (v + w) := by
 
 theorem part_d : ∀ (u v w: ℂ), u * (v + w) = u * v + u * w := by
   intro u v w
-  ext
-  · rw [mul_re, add_re, mul_add, add_im, mul_add, sub_add_eq_sub_sub]
-    rw [add_re, mul_re, mul_re, ← add_sub_assoc]
-    linarith
-  · rw [mul_im, add_im, mul_add, add_re, mul_add, ← add_assoc]
-    rw [add_im, mul_im, mul_im, ← add_assoc]
-    linarith
+  ext <;> simp <;> linarith
 
 theorem part_e : ∀ (u v w: ℂ), u * (v * w) = (u * v) * w := by
   intro u v w
