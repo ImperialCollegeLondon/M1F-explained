@@ -24,7 +24,7 @@ def Int.modEq_sub_fac {a b n : ℤ} (c : ℤ) (ha : a ≡ b [ZMOD n]) : a - n * 
   convert Int.modEq_add_fac (-c) ha using 1
   ring
 
-lemma part_a (x : ℕ) (hx : 24 > x) : ∃ (m : ℕ), x + 7 * m ≡ 9 [MOD 24] := by
+lemma part_a (x : ℕ) (hx : x < 24) : ∃ (m : ℕ), x + 7 * m ≡ 9 [MOD 24] := by
   use 7 * (33 - x)
   rw [← Int.coe_nat_modEq_iff]
   push_cast
