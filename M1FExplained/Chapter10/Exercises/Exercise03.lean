@@ -14,7 +14,7 @@ Show that some days it is possible to catch this train at 9:00 am
 Given that the train leaves at x o'clock on some day, we wish 
 to show that it is possible for it to leave at 9:00 am eventually.
 i.e there is some multiple of 7 we can add to x so that it is 
-congrueng to 9 modulo 24. 
+congruent to 9 modulo 24. 
 
 (Since the train leaves every 7 hours and we are using 24 hour time) 
 -/
@@ -24,7 +24,7 @@ def Int.modEq_sub_fac {a b n : ℤ} (c : ℤ) (ha : a ≡ b [ZMOD n]) : a - n * 
   convert Int.modEq_add_fac (-c) ha using 1
   ring
 
-lemma part_a (x : ℕ) (hx : 24 > x) : ∃ (m : ℕ), x + 7 * m ≡ 9 [MOD 24] := by
+lemma part_a (x : ℕ) (hx : x < 24) : ∃ (m : ℕ), x + 7 * m ≡ 9 [MOD 24] := by
   use 7 * (33 - x)
   rw [← Int.coe_nat_modEq_iff]
   push_cast

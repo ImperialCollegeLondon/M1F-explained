@@ -59,6 +59,8 @@ Ex 1 : done
 
 ## Chapters 11-12
 
+nothing formalised
+
 ## Chapter 13
 
 Ex 1 done
