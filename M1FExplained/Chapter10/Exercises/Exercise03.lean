@@ -25,11 +25,14 @@ def Int.modEq_sub_fac {a b n : ℤ} (c : ℤ) (ha : a ≡ b [ZMOD n]) : a - n * 
   ring
 
 lemma part_a (x : ℕ) (hx : x < 24) : ∃ (m : ℕ), x + 7 * m ≡ 9 [MOD 24] := by
+  -- Our choice of 'm'
   use 7 * (33 - x)
+  -- The next four lines simplify the goal whilst keeping trach of the coerscions from ℕ to ℤ
   rw [← Int.coe_nat_modEq_iff]
   push_cast
   rw [Nat.cast_sub (show x ≤ 33 by linarith)]
   ring_nf
+  -- Use the fact that we are working modulo 24 to simplify adn prove our 'm' works
   rw [show (48 : ℤ) = 2 * 24 by norm_num, ← mul_assoc, mul_comm]
   apply Int.modEq_sub_fac
   norm_num
