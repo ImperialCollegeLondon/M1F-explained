@@ -46,17 +46,16 @@ lemma helper (m n : ℤ) (h1 : 0 < abs m) (h2 : abs m < abs n) : ¬ n ∣ m := b
   assumption
 
 lemma part_b (m n : ℤ) (h1 : ¬(m = 0 ∨ n = 0)) (h2 : Int.gcd m n ≠ 1) : ∃ (a : ℤ), (m ∣ a) ∧ (n ∣ a) ∧ (¬(m * n) ∣ a) := by 
-  let M := Int.gcd m n
+  let M : ℤ := Int.gcd m n
   use (m * n / M)
   apply And.intro
-  ·rw [show m * n / M = m * (n / M) by sorry]
+  ·rw [show m * n / M = m * (n / M) by exact Int.mul_ediv_assoc m (show M ∣ n by exact Int.gcd_dvd_right m n)]
    have : m ∣ m := by use 1; norm_num
    exact dvd_mul_of_dvd_left this (n / M)
   apply And.intro
   ·rw [show m * n / M = n * (m / M) by sorry]
    have : n ∣ n := by use 1; norm_num
    exact dvd_mul_of_dvd_left this (m / M)
-   --------
   ·have h1 : 0 < abs (m * n / M) := by sorry
    have h2 : abs (m * n / M)  < abs (m * n) := by sorry
    exact helper (m * n / M) (m * n) h1 h2
