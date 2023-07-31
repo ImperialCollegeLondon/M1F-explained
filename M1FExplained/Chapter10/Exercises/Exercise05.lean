@@ -1,7 +1,14 @@
 import Mathlib.Tactic
-
+import M1FExplained.Chapter10.Exercises.Exercise04
 
 namespace Chapter10.Exercise05
+
+-- part a
+
+/- 
+Let m, n be coprime integers, and suppose that a is n integer which is divisible by both m and n. 
+Prove that m * n divides a. 
+-/
 
 lemma part_a (m n a : ℤ) (hmn : Int.gcd m n = 1) (hm : m ∣ a) (hn : n ∣ a) : (m * n) ∣ a := by 
   match hm with 
@@ -31,6 +38,20 @@ lemma part_a (m n a : ℤ) (hmn : Int.gcd m n = 1) (hm : m ∣ a) (hn : n ∣ a)
     a = k₁ * m := by exact hk₁
     _ = (n * e) * m := by rw [he]
     _ = m * n * e := by ring
+
+-- part b
+
+/- 
+Show that the conclusion of part a is false if m and n are not coprime (i.e, show that if  and n
+are not coprime, here exists an integer a such that m ∣ a and n ∣ a but ¬ m * n ∣ a)
+-/
+
+/- 
+Note that this statment of the question as in the book is incorrect. If we restrict m and n to be 
+non-zero, then the statment is true, so that is what we will prove.
+
+To help, we first define two helper lemmas as the solution is longwinded.
+-/
 
 lemma helper_1 (m n M : ℤ) (hM : 1 < abs M) (hM' : M ∣ m * n) (hm : m ≠ 0) (hn : n ≠ 0) : abs (m * n / M)  < abs (m * n) := by
 match hM' with 
@@ -64,7 +85,8 @@ lemma helper_2 (m n : ℤ) (h1 : 0 < abs m) (h2 : abs m < abs n) : ¬ n ∣ m :=
   simp at this
   assumption
 
--- QUESTION WRONG m, n ≠ 0 
+-- Actual statment of part b:
+
 lemma part_b (m n : ℤ) (hm : m ≠ 0) (hn : n ≠ 0) (h2 : Int.gcd m n ≠ 1) : ∃ (a : ℤ), (m ∣ a) ∧ (n ∣ a) ∧ (¬(m * n) ∣ a) := by 
   let M : ℤ := Int.gcd m n
   use (m * n / M)
@@ -118,6 +140,12 @@ lemma part_b (m n : ℤ) (hm : m ≠ 0) (hn : n ≠ 0) (h2 : Int.gcd m n ≠ 1) 
    have h2' : abs (m * n / M)  < abs (m * n) := by exact helper_1 m n M h1M hMmn hm hn
    exact helper_2 (m * n / M) (m * n) h1' h2'
 
+-- part c
+
+/-
+Show that if gcd(x, m) = 1 and gcd(y, m) = 1, then gcd(x * y, m) = 1
+-/
+
 lemma part_c (x y m : ℤ) (hx : Int.gcd x m = 1) (hy : Int.gcd y m = 1) : Int.gcd (x * y) m = 1 := by 
   let a := Int.gcdA x m
   let b := Int.gcdB x m
@@ -125,15 +153,13 @@ lemma part_c (x y m : ℤ) (hx : Int.gcd x m = 1) (hy : Int.gcd y m = 1) : Int.g
   let d := Int.gcdB y m
   have hxm : 1 = x * a + m * b := by rw [←Int.gcd_eq_gcd_ab x m, hx]; norm_cast
   have hym : 1 = y * c + m * d := by rw [←Int.gcd_eq_gcd_ab y m, hy]; norm_cast
-  have h   : 1 = x * y * a * c + (x * a * d + b * y * c + m * b * d) * m := by
+  have h   : 1 = a * c * x * y  + (x * a * d + b * y * c + m * b * d) * m := by
     calc 
       1 = 1 * 1 := by norm_num
       _ = (x * a + m * b) * (y * c + m * d) := by nth_rewrite 1 [hxm]; rw [hym]
       _ = x * a * y * c + x * a * m * d + m * b * y * c + m * b * m * d := by ring
-      _ = x * y * a * c + (x * a * d + b * y * c + m * b * d) * m := by ring
-  /- Need lemma saying that if ∃ s, t : a * s * b * t = 1, then gcd(a, b) = 1, this is Q4C -/
-  sorry
-
-
+      _ = a * c * x * y  + (x * a * d + b * y * c + m * b * d) * m := by ring
+  rw [←show a * c * (x * y) = a * c * x * y by ring] at h
+  exact Chapter10.Exercise04.part_c (a * c) ((x * a * d + b * y * c + m * b * d)) (x * y) m (Eq.symm h)
 
 end Chapter10.Exercise05
