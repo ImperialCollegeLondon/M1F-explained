@@ -32,8 +32,34 @@ lemma part_a (m n a : ℤ) (hmn : Int.gcd m n = 1) (hm : m ∣ a) (hn : n ∣ a)
     _ = (n * e) * m := by rw [he]
     _ = m * n * e := by ring
 
-lemma part_b (m n : ℤ) (hmn : Int.gcd m n ≠ 1) : ∃ (a : ℤ), (m ∣ a) ∧ (n ∣ a) ∧ (¬(m * n) ∣ a) := by sorry
-  
+lemma helper (m n : ℤ) (h1 : 0 < abs m) (h2 : abs m < abs n) : ¬ n ∣ m := by 
+  have h1' : 0 < Int.natAbs m := by {
+    rw [@Int.natAbs_pos]
+    exact Iff.mp abs_pos h1
+  }
+  have h2' : Int.natAbs m < Int.natAbs n := by {
+    rw [@Int.natAbs_lt_iff_sq_lt]
+    exact Iff.mpr sq_lt_sq h2
+  }
+  have := @Nat.not_dvd_of_pos_of_lt _ _ h1' h2'
+  simp at this
+  assumption
+
+lemma part_b (m n : ℤ) (h1 : ¬(m = 0 ∨ n = 0)) (h2 : Int.gcd m n ≠ 1) : ∃ (a : ℤ), (m ∣ a) ∧ (n ∣ a) ∧ (¬(m * n) ∣ a) := by 
+  let M := Int.gcd m n
+  use (m * n / M)
+  apply And.intro
+  ·rw [show m * n / M = m * (n / M) by sorry]
+   have : m ∣ m := by use 1; norm_num
+   exact dvd_mul_of_dvd_left this (n / M)
+  apply And.intro
+  ·rw [show m * n / M = n * (m / M) by sorry]
+   have : n ∣ n := by use 1; norm_num
+   exact dvd_mul_of_dvd_left this (m / M)
+   --------
+  ·have h1 : 0 < abs (m * n / M) := by sorry
+   have h2 : abs (m * n / M)  < abs (m * n) := by sorry
+   exact helper (m * n / M) (m * n) h1 h2
 
 lemma part_c (x y m : ℤ) (hx : Int.gcd x m = 1) (hy : Int.gcd y m = 1) : Int.gcd (x * y) m = 1 := by 
   let a := Int.gcdA x m
