@@ -45,7 +45,8 @@ lemma helper (m n : ℤ) (h1 : 0 < abs m) (h2 : abs m < abs n) : ¬ n ∣ m := b
   simp at this
   assumption
 
-lemma part_b (m n : ℤ) (h1 : ¬(m = 0 ∨ n = 0)) (h2 : Int.gcd m n ≠ 1) : ∃ (a : ℤ), (m ∣ a) ∧ (n ∣ a) ∧ (¬(m * n) ∣ a) := by 
+-- QUESTION WRONG m, n ≠ 0 
+lemma part_b (m n : ℤ) (hm : m ≠ 0) (hn : n ≠ 0) (h2 : Int.gcd m n ≠ 1) : ∃ (a : ℤ), (m ∣ a) ∧ (n ∣ a) ∧ (¬(m * n) ∣ a) := by 
   let M : ℤ := Int.gcd m n
   use (m * n / M)
   apply And.intro
@@ -61,9 +62,23 @@ lemma part_b (m n : ℤ) (h1 : ¬(m = 0 ∨ n = 0)) (h2 : Int.gcd m n ≠ 1) : �
   }]
    have : n ∣ n := by use 1; norm_num
    exact dvd_mul_of_dvd_left this (m / M)
-  ·have h1 : 0 < abs (m * n / M) := by sorry
-   have h2 : abs (m * n / M)  < abs (m * n) := by sorry
-   exact helper (m * n / M) (m * n) h1 h2
+  ·have h1' : 0 < abs (m * n / M) := by {
+    rw [abs_pos]
+    intro h
+    have : M ∣ m := by exact Int.gcd_dvd_left m n
+    have hM : M ∣ m * n := by {
+      match this with
+      |⟨k, hk⟩ => 
+      use k * n
+      rw [hk]
+      rw [mul_assoc]
+    }
+    have := Int.eq_zero_of_ediv_eq_zero hM h
+    rw [mul_eq_zero] at this
+    tauto
+  }
+   have h2' : abs (m * n / M)  < abs (m * n) := by sorry
+   exact helper (m * n / M) (m * n) h1' h2'
 
 lemma part_c (x y m : ℤ) (hx : Int.gcd x m = 1) (hy : Int.gcd y m = 1) : Int.gcd (x * y) m = 1 := by 
   let a := Int.gcdA x m
