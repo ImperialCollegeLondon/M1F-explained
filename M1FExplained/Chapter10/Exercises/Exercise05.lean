@@ -49,11 +49,16 @@ lemma part_b (m n : ℤ) (h1 : ¬(m = 0 ∨ n = 0)) (h2 : Int.gcd m n ≠ 1) : �
   let M : ℤ := Int.gcd m n
   use (m * n / M)
   apply And.intro
-  ·rw [show m * n / M = m * (n / M) by exact Int.mul_ediv_assoc m (show M ∣ n by exact Int.gcd_dvd_right m n)]
+  ·rw [show m * n / M = m * (n / M) by {
+    exact Int.mul_ediv_assoc m (show M ∣ n by exact Int.gcd_dvd_right m n)
+  }]
    have : m ∣ m := by use 1; norm_num
    exact dvd_mul_of_dvd_left this (n / M)
   apply And.intro
-  ·rw [show m * n / M = n * (m / M) by sorry]
+  ·rw [show m * n / M = n * (m / M) by {
+    rw [←mul_comm n m]
+    exact Int.mul_ediv_assoc n (show M ∣ m by exact Int.gcd_dvd_left m n)
+  }]
    have : n ∣ n := by use 1; norm_num
    exact dvd_mul_of_dvd_left this (m / M)
   ·have h1 : 0 < abs (m * n / M) := by sorry
