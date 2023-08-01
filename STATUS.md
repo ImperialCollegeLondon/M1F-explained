@@ -58,7 +58,7 @@ No statements have been formalised here.
 Ex 1 : done
 Ex 2 : part a statment done, part b done
 Ex 3 : part a, b done. Part c statment done
-Ex 4 : part a statment done, parts b, c mostly done
+Ex 4 : done
 Ex 5 : part a done, part b statment done, part c one sorry left.
 
 ## Chapters 11-12
