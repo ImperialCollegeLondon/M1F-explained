@@ -130,7 +130,7 @@ Here is an alternate, much simpler proof of part c using `Int.gcd_eq_one_iff_cop
 -/
 
 lemma part_c' (s t a b : ℤ) (h : s * a + t * b = 1) : Int.gcd a b = 1 := by
-have : IsCoprime a b := by use s; use t; assumption
-exact Iff.mpr Int.gcd_eq_one_iff_coprime this 
+  have : IsCoprime a b := by use s; use t; assumption
+  exact Iff.mpr Int.gcd_eq_one_iff_coprime this 
 
 end Chapter10.Exercise04
