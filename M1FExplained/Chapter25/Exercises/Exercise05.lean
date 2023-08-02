@@ -15,12 +15,12 @@ import Mathlib.Data.Nat.Basic
 
 ---part a
 
-example {G : Type u_1} [Group G] : ∀ (a b : G), (a*b)^2 = a^2*b^2 → a*b = a*b := by
-  intro a b h₁
-  rw [sq,sq,sq,mul_assoc, mul_assoc,mul_left_cancel_iff,← mul_assoc, ← mul_assoc, mul_right_cancel_iff] at h₁ 
-  
---- part b
+example {G : Type u_1} [Group G] : (∀ (a b : G), (a*b)^2 = a^2*b^2) → ∀ ( x y : G), y*x = x*y := by
+  intro h₀ x y
+  have h₁ : (x * y)^2 = x^2 * y^2 := by apply h₀ x y
+  rwa [sq,sq,sq,mul_assoc, mul_assoc,mul_left_cancel_iff,← mul_assoc, ← mul_assoc, mul_right_cancel_iff] at h₁
 
+--- part b
 
 example {G : Type u_1} [Group G] (i : ℕ) : ∀ a b : G, (a*b)^i = a^i*b^i ∧ (a*b)^(i + 1) = a^(i + 1)*b^(i + 1) ∧
 (a*b)^(i + 2) = a^(i + 2)*b^(i + 2) → a*b = b*a := by
@@ -40,6 +40,8 @@ example {G : Type u_1} [Group G] (i : ℕ) : ∀ a b : G, (a*b)^i = a^i*b^i ∧ 
 
 --- part c
 
-/- Maybe I am being dumb, but I don't see how I can formalise this statement -/
+example {G : Type u_1} [Group G] (i : ℕ) : ∀ a b : G, (a*b)^i = a^i*b^i ∧ (a*b)^(i + 1) = a^(i + 1)*b^(i + 1)
+   → ¬ a*b = b*a := by
+  sorry
 
 
