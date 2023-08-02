@@ -2,14 +2,33 @@ import Mathlib.Tactic
 
 namespace Chapter10.Exercise02
 
+-- part a
+
 /-
-Part a asks us to prove that for natural numbers a, b, ∃ s t : ℕ such that gcd(a, b) = s * a - t * b
+Show that if a, b are positive integers and d = gcd(a, b), there exists positive integers s, t such
+that d = s * a - t * b
 -/
 
-lemma part_a (a b d : ℕ) (hd : d = Nat.gcd a b) : ∃ (s t : ℕ),  d = s * a - t * b := by sorry
+lemma part_a (a b : ℕ) (ha : a ≠ 0) (hb : b ≠ 0) : ∃ (s t : ℕ), Nat.gcd a b = s * a - t * b ∧ s ≠ 0 ∧ t ≠ 0 := by
+  let s := Int.gcdA a b
+  let t := - Int.gcdB a b
+  have h₁ : a = Int.natAbs a := by rfl
+  have h₂ : b = Int.natAbs b := by rfl
+  rw [h₁, h₂, ←Int.gcd_eq_natAbs]
+  have h₃ := Int.gcd_eq_gcd_ab a b
+  have h₄ : s > 0 := by sorry
+  have h₅ : t > 0 := by sorry
+sorry
+  #check Int.gcd_eq_natAbs
+
+-- part b
 
 /-
-Part b asks us to find such s and t for the examples in exercise 01, Lean provides us with these: 
+Find such positive integers s, t for each of the cases (i) - (iii) in Exercise 1.
+-/
+
+/-
+These are exatly the integers we found in Exercise 1, and lean finds them for us easily.
 -/
 
 -- a = 17, b = 29
