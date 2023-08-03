@@ -104,8 +104,7 @@ lemma part_b (m n : ℤ) (hm : m ≠ 0) (hn : n ≠ 0) (h2 : Int.gcd m n ≠ 1) 
   ·rw [show m * n / M = m * (n / M) by {
     exact Int.mul_ediv_assoc m (show M ∣ n by exact Int.gcd_dvd_right m n)
   }]
-   have : m ∣ m := by use 1; norm_num
-   exact dvd_mul_of_dvd_left this (n / M)
+   exact dvd_mul_of_dvd_left (Int.dvd_refl m) (n / M)
   apply And.intro
   -- Next, prove n ∣ a.
   ·rw [show m * n / M = n * (m / M) by {
