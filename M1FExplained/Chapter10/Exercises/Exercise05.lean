@@ -83,14 +83,12 @@ It says that an integer n cannot divide any non-zero integer m which is smaller 
 -/
 
 lemma helper_2 (m n : ℤ) (h1 : 0 < abs m) (h2 : abs m < abs n) : ¬ n ∣ m := by 
-  have h1' : 0 < Int.natAbs m := by {
-    rw [Int.natAbs_pos]
+  have h1' : 0 < Int.natAbs m
+  · rw [Int.natAbs_pos]
     exact Iff.mp abs_pos h1
-  }
-  have h2' : Int.natAbs m < Int.natAbs n := by {
-    rw [Int.natAbs_lt_iff_sq_lt]
+  have h2' : Int.natAbs m < Int.natAbs n
+  · rw [Int.natAbs_lt_iff_sq_lt]
     exact Iff.mpr sq_lt_sq h2
-  }
   have := Nat.not_dvd_of_pos_of_lt h1' h2'
   simpa
 
