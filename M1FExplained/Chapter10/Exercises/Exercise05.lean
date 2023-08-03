@@ -113,9 +113,8 @@ lemma part_b (m n : ℤ) (hm : m ≠ 0) (hn : n ≠ 0) (h2 : Int.gcd m n ≠ 1) 
   }]
    have : n ∣ n := by use 1; norm_num
    exact dvd_mul_of_dvd_left this (m / M)
-  have : M ∣ m := by exact Int.gcd_dvd_left m n
   have hMmn : M ∣ m * n := by {
-    match this with
+    match Int.gcd_dvd_left m n with
     |⟨k, hk⟩ => 
     use k * n
     rw [hk]
