@@ -69,13 +69,13 @@ lemma helper_1 (m n M : ℤ) (hM : 1 < abs M) (hM' : M ∣ m * n) (hm : m ≠ 0)
     tauto
   }
   rw [hk, abs_mul, Int.mul_ediv_cancel_left]
-  ·calc
+  · calc
     abs k = 1 * abs k := by norm_num
     _ < abs M * abs k := by rel [hM]
-  ·intro h 
-   have hM0 : abs M = 0 := by simp; exact h
-   have : ¬ 1 < abs M := by rw [hM0]; norm_num
-   contradiction
+  · intro h 
+    have hM0 : abs M = 0 := by simp; exact h
+    have : ¬ 1 < abs M := by rw [hM0]; norm_num
+    contradiction
 
 /- 
 helper_2 converts `Nat.not_dvd_of_pos_of_lt` to the integer case, casting to absolute values.
