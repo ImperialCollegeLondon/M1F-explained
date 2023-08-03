@@ -40,8 +40,12 @@ example {G : Type u_1} [Group G] (i : ℕ) : ∀ a b : G, (a*b)^i = a^i*b^i ∧ 
 
 --- part c
 
-example {G : Type u_1} [Group G] (i : ℕ) : ¬ (∀ a b : G, (a*b)^i = a^i*b^i ∧ (a*b)^(i + 1) = a^(i + 1)*b^(i + 1)
-   → a*b = b*a) := by
+example {G : Type u_1} [Group G] (i : ℕ) : ¬ ((∀ a b : G, (a*b)^i = a^i*b^i ∧ (a*b)^(i + 1) = a^(i + 1)*b^(i + 1))
+→  ∀ ( x y : G), y*x = x*y) := by
+  intro h
+  by_contra h₀
+  apply h₀
+  
   sorry
 
 
