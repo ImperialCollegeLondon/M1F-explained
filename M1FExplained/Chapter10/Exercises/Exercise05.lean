@@ -91,7 +91,7 @@ lemma helper_2 (m n : ℤ) (h1 : 0 < abs m) (h2 : abs m < abs n) : ¬ n ∣ m :=
     rw [Int.natAbs_lt_iff_sq_lt]
     exact Iff.mpr sq_lt_sq h2
   }
-  have := @Nat.not_dvd_of_pos_of_lt _ _ h1' h2'
+  have := Nat.not_dvd_of_pos_of_lt h1' h2'
   simp at this
   assumption
 
