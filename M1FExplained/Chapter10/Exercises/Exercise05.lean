@@ -132,8 +132,7 @@ lemma part_b (m n : ℤ) (hm : m ≠ 0) (hn : n ≠ 0) (h2 : Int.gcd m n ≠ 1) 
     rw [Int.abs_le_one_iff] at h
     apply Or.elim h
     ·intro hM0
-     simp at hM0
-     rw [Int.gcd_eq_zero_iff] at hM0
+     simp [Int.gcd_eq_zero_iff] at hM0
      tauto
     ·intro
      | Or.inl hone => simp at hone; contradiction
