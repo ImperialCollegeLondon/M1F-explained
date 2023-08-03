@@ -99,13 +99,13 @@ lemma part_b (m n : ℤ) (hm : m ≠ 0) (hn : n ≠ 0) (h2 : Int.gcd m n ≠ 1) 
   /- Since m / M and n / M are both integers, our choice of a has both factors m and n. However m * n > a,
   so cannot possibly divide it. -/
   use (m * n / M)
-  apply And.intro
+  constructor
   -- First prove that m ∣ a.
   ·rw [show m * n / M = m * (n / M) by {
     exact Int.mul_ediv_assoc m (show M ∣ n by exact Int.gcd_dvd_right m n)
   }]
    exact dvd_mul_of_dvd_left (Int.dvd_refl m) (n / M)
-  apply And.intro
+  constructor
   -- Next, prove n ∣ a.
   ·rw [show m * n / M = n * (m / M) by {
     rw [←mul_comm n m]
