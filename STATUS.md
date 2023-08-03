@@ -31,7 +31,15 @@ Ex 7 : statement formalised
 
 Ex 8 : done
 
-## Chapters 3 to 7
+## Chapters 3 to 5
+
+No statements have been formalised here.
+
+## Chapter 6
+
+Ex 1 : done
+
+## Chapter 7
 
 No statements have been formalised here.
 
