@@ -42,8 +42,7 @@ with the following (choosing `a ≠ 0` WLOG):
 example (a b : ℤ) (ha : a ≠ 0) (hab : a ∣ b) (hba : b ∣ a) : b ≠ 0 := by
   intro h
   rw [h] at hba
-  simp at hba
-  contradiction
+  simp_all
 
 /-
 Now for the actual question. First a helper lemma is proven which is relevant for both 
