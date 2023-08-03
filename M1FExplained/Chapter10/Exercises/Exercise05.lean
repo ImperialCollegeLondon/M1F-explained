@@ -64,8 +64,7 @@ lemma helper_1 (m n M : ℤ) (hM : 1 < abs M) (hM' : M ∣ m * n) (hm : m ≠ 0)
   |⟨k, hk⟩ => 
   have hkn0 : 0 < abs k := by {
     rw [abs_pos]
-    intro h
-    rw [h] at hk
+    rintro rfl
     simp at hk
     tauto
   }
