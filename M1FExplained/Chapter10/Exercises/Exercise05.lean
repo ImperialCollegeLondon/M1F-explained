@@ -129,8 +129,7 @@ lemma part_b (m n : ℤ) (hm : m ≠ 0) (hn : n ≠ 0) (h2 : Int.gcd m n ≠ 1) 
    have h1M : 1 < abs M := by {
     by_contra h
     push_neg at h
-    have := @Int.abs_le_one_iff M
-    rw [this] at h
+    rw [Int.abs_le_one_iff] at h
     apply Or.elim h
     ·intro hM0
      simp at hM0
