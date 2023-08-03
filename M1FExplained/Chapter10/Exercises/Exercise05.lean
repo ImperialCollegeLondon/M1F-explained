@@ -143,10 +143,6 @@ lemma part_b (m n : ℤ) (hm : m ≠ 0) (hn : n ≠ 0) (h2 : Int.gcd m n ≠ 1) 
     ·intro
      | Or.inl hone => simp at hone; contradiction
      | Or.inr hmone => 
-     have : 0 < M := by {
-      rw [@Int.ofNat_pos]
-      exact Int.gcd_pos_of_ne_zero_left n hm
-     }
      contradiction
    }
    -- Apply both helper_1 and helper_2 to finish the proof.
