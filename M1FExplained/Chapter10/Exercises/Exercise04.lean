@@ -66,7 +66,7 @@ lemma part_b (a b : ℤ) (ha : a ≠ 0) (hb : b ≠ 0) (hab : a ∣ b) (hba : b 
   -- If `b = a * k₁` and `a = b * k₂`, then it must be that `k₁ * k₂  = 1`.
   have h₁ : 1 = k₂ * k₁ := by 
     calc
-      1 = b / b := by exact Eq.symm (Int.ediv_self hb)
+      1 = b / b := by rw [Int.ediv_self hb]
       _ = (b * k₂ * k₁) / b := by nth_rewrite 1 [hk₁]; rfl
       _ = k₂ * k₁ := by rw [Int.mul_assoc]; exact Int.mul_ediv_cancel_left (k₂ * k₁) hb
   -- The helper tells us that `k₂ = ±1`. The same of course holds for k₁. 
