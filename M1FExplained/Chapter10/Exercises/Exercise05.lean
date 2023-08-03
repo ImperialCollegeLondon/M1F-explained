@@ -94,16 +94,16 @@ lemma helper_2 (m n : ℤ) (h1 : 0 < abs m) (h2 : abs m < abs n) : ¬ n ∣ m :=
 
 -- Actual statment of part b:
 
-lemma part_b (m n : ℤ) (hm : m ≠ 0) (hn : n ≠ 0) (h2 : Int.gcd m n ≠ 1) : ∃ (a : ℤ), (m ∣ a) ∧ (n ∣ a) ∧ (¬(m * n) ∣ a) := by 
+lemma part_b (m n : ℤ) (hm : m ≠ 0) (hn : n ≠ 0) (h2 : Int.gcd m n ≠ 1) : 
+  ∃ (a : ℤ), (m ∣ a) ∧ (n ∣ a) ∧ (¬(m * n) ∣ a) := by 
   let M : ℤ := Int.gcd m n
   /- Since m / M and n / M are both integers, our choice of a has both factors m and n. However m * n > a,
   so cannot possibly divide it. -/
   use (m * n / M)
   constructor
   -- First prove that m ∣ a.
-  ·rw [show m * n / M = m * (n / M) by {
-    exact Int.mul_ediv_assoc m (show M ∣ n by exact Int.gcd_dvd_right m n)
-  }]
+  ·rw [show m * n / M = m * (n / M) from Int.mul_ediv_assoc m 
+  (show M ∣ n by exact Int.gcd_dvd_right m n)]
    exact dvd_mul_of_dvd_left (Int.dvd_refl m) (n / M)
   constructor
   -- Next, prove n ∣ a.
