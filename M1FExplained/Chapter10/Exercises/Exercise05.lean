@@ -127,8 +127,7 @@ lemma part_b (m n : ℤ) (hm : m ≠ 0) (hn : n ≠ 0) (h2 : Int.gcd m n ≠ 1) 
     tauto
   }
    have h1M : 1 < abs M := by {
-    apply by_contradiction
-    intro h
+    by_contra h
     push_neg at h
     have := @Int.abs_le_one_iff M
     rw [this] at h
