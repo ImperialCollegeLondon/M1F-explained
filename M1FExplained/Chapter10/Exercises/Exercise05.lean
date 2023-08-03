@@ -6,7 +6,7 @@ namespace Chapter10.Exercise05
 -- part a
 
 /- 
-Let m, n be coprime integers, and suppose that a is n integer which is divisible by both m and n. 
+Let m, n be coprime integers, and suppose that a is an integer which is divisible by both m and n. 
 Prove that m * n divides a. 
 -/
 
