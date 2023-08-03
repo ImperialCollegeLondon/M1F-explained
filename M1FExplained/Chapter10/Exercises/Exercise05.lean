@@ -117,8 +117,7 @@ lemma part_b (m n : ℤ) (hm : m ≠ 0) (hn : n ≠ 0) (h2 : Int.gcd m n ≠ 1) 
     match Int.gcd_dvd_left m n with
     |⟨k, hk⟩ => 
     use k * n
-    rw [hk]
-    rw [mul_assoc]}
+    rw [hk, mul_assoc]}
   -- Finally, we prove that (m * n) cannot divide a, because it is larger.
   ·have h1' : 0 < abs (m * n / M) := by {
     rw [abs_pos]
