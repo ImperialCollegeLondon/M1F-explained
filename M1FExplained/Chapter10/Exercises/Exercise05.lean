@@ -134,10 +134,10 @@ lemma part_b (m n : ℤ) (hm : m ≠ 0) (hn : n ≠ 0) (h2 : Int.gcd m n ≠ 1) 
     ·intro hM0
      simp [Int.gcd_eq_zero_iff] at hM0
      tauto
-    ·intro
-     | Or.inl hone => simp at hone; contradiction
-     | Or.inr hmone => 
-     contradiction
+    · intro
+      | Or.inl hone => simp at hone; contradiction
+      | Or.inr hmone => 
+      contradiction
    }
    -- Apply both helper_1 and helper_2 to finish the proof.
    have h2' : abs (m * n / M)  < abs (m * n) := by exact helper_1 m n M h1M hMmn hm hn
