@@ -7,6 +7,11 @@ Let n ≥ 2 be an integer. Prove that n is prime if and only if for every intege
 either gcd(a, n) = 1 or n ∣ a. 
 -/
 
+example (a n : ℤ) (hprime : Prime n) (ha :  a < n) : Int.gcd a n = 1 := by sorry
+
+example (a n : ℤ) (hprime : Prime n) (ha : ¬n ∣ a) : Int.gcd a n = 1 := by sorry
+#check Int.exists_prime_and_dvd
+
 lemma exercise08 (n : ℤ) (hn : n ≥ 2) : Prime n ↔ ∀ (a : ℤ), Int.gcd a n = 1 ∨ n ∣ a := by 
   constructor
   · intros hprime a
@@ -41,15 +46,9 @@ lemma exercise08 (n : ℤ) (hn : n ≥ 2) : Prime n ↔ ∀ (a : ℤ), Int.gcd a
             exact Nat.gcd_eq_right h4
           rw [Int.gcd_eq_natAbs, Int.natAbs_mul] at h3
           rw [h3] at h5
-          apply Or.elim (show n = 1 ∨ n = -1 by exact Iff.mp Int.natAbs_eq_natAbs_iff (id (Eq.symm h5)) )
+          apply Or.elim (show n = 1 ∨ n = -1 by exact Iff.mp Int.natAbs_eq_natAbs_iff (id (Eq.symm h5)))
           <;> intro <;> linarith
         · tauto
       · tauto
-  
-  sorry
-#print Prime 4
-#eval 0 ∣ 0
-#eval Int.gcd 0 0 = 1
-#check Int.gcd_eq_natAbs
 
 end Chapter10.Exercise08
