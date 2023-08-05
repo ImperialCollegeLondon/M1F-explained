@@ -11,7 +11,9 @@ will it be before this again happens on a Sunday?
 
 /-
 We can say that all three of these events happen on 'day 0'. The next day on which
-all of these three things happen simultaneously will be 'day l' where l = lcm(3, 4, 7).
+all of these three things happen simultaneously will be 'day l' where l = lcm(3, 4, 7),
+which is 84. Since Lean doesn't have an inbuilt 'lcm of three numbers', we can 
+equivalently prove that 84 is the smallest element of the set of multiples of 3, 4 and 7. 
 -/
 
 lemma exercise07 : IsLeast {n : ℕ | n > 0 ∧ 3 ∣ n ∧ 4 ∣ n ∧ 7 ∣ n} 84 := by 
