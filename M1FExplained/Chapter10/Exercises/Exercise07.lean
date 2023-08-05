@@ -22,7 +22,7 @@ lemma exercise07 : IsLeast {n : ℕ | n > 0 ∧ 3 ∣ n ∧ 4 ∣ n ∧ 7 ∣ n}
     intros x hx
     by_contra h
     push_neg at h
-    have h'' : x ∈ {n : ℕ | n > 0 ∧ n < 84 ∧ 3 ∣ n ∧ 4 ∣ n ∧ 7 ∣ n} := by sorry
+    have h'' : x ∈ {n : ℕ | n > 0 ∧ n < 84 ∧ 3 ∣ n ∧ 4 ∣ n ∧ 7 ∣ n} := by simp at *; tauto
     have h' : ∅ = {n : ℕ | n > 0 ∧ n < 84 ∧ 3 ∣ n ∧ 4 ∣ n ∧ 7 ∣ n} := by 
       rw [@Set.ext_iff]
       intro y
