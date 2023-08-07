@@ -51,10 +51,11 @@ lemma helper (a b n : ℤ) (hb : 0 < b) (hab : ∃ (s t : ℤ), s * a + t * b = 
   · linear_combination hst
 
 /-
-Next the actual question is proven
+Next the actual question is proven, the restraint that a is positive
+has been removed as it is not necessary.
 -/
 
-lemma exercise09 (a b : ℤ) (ha : a > 0) (hb : b > 0) (hab : IsCoprime a b) : 
+lemma exercise09 (a b : ℤ) (hb : b > 0) (hab : IsCoprime a b) : 
   ∀ (n : ℤ), ∃ (s t : ℤ), 0 < s ∧ s * a + t * b = n := by
   rcases hab with ⟨s', t', hst⟩
   intro n
