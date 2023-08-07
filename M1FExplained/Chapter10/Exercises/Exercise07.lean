@@ -4,7 +4,7 @@ import Mathlib.Tactic
 namespace Chapter10.Exercise07
 
 /-
-Jim plays chess every 3 days, and his friend Marmaduke ats spaghetti every 4 days.
+Jim plays chess every 3 days, and his friend Marmaduke eats spaghetti every 4 days.
 One Sunday it happens that Jim plays chess and Marmaduke eats spaghetti. How long 
 will it be before this again happens on a Sunday?
 -/
