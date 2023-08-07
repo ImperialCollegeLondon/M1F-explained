@@ -6,7 +6,8 @@ namespace Chapter10.Exercise02
 Part a asks us to prove that for natural numbers a, b, ∃ s t : ℕ such that gcd(a, b) = s * a - t * b
 -/
 
-lemma part_a (a b d : ℕ) (hd : d = Nat.gcd a b) : ∃ (s t : ℕ),  d = s * a - t * b := by sorry
+lemma part_a (a b : ℤ) (ha : a > 0) (hb : b > 0) : 
+  ∃ (s t : ℤ), s > 0 ∧ t > 0 ∧ Int.gcd a b = s * a - t * b := by sorry
 
 /-
 Part b asks us to find such s and t for the examples in exercise 01, Lean provides us with these: 
