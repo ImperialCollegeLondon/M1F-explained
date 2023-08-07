@@ -44,7 +44,7 @@ lemma helper (a b n : ℤ) (hb : 0 < b) (hab : ∃ (s t : ℤ), s * a + t * b = 
   set p := (b - s) / b with hp
   use s + p * b, t - p * a
   constructor
-  · rw [hp, ← @neg_lt_iff_pos_add']
+  · rw [hp, ← neg_lt_iff_pos_add']
     calc
       -s = (b - s) - b := by norm_num
       _ < (b - s) / b * b := by exact Int.sub_lt_div_mul_self hb
