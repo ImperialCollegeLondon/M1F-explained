@@ -69,6 +69,8 @@ Ex 3 : part a, b done. Part c statment
 Ex 4 : done
 Ex 5 : done
 
+Ex 7 : done
+
 
 ## Chapters 11-12
 
