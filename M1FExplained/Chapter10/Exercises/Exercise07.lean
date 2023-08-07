@@ -21,40 +21,16 @@ lemma exercise07 : IsLeast {n : ℕ | n > 0 ∧ 3 ∣ n ∧ 4 ∣ n ∧ 7 ∣ n}
   constructor
   · simp
   · rw [mem_lowerBounds]
-    intros x hx
-    by_contra h
-    push_neg at h
-    have h'' : x ∈ {n : ℕ | n > 0 ∧ n < 84 ∧ 3 ∣ n ∧ 4 ∣ n ∧ 7 ∣ n} := by simp at *; tauto
-    have h' : ∅ = {n : ℕ | n > 0 ∧ n < 84 ∧ 3 ∣ n ∧ 4 ∣ n ∧ 7 ∣ n} := by 
-      rw [@Set.ext_iff]
-      intro y
-      constructor
-      · intro; exfalso; assumption
-      · intro 
-        | ⟨h0, h1, h2, h3, h4⟩ => 
-        match h2, h3, h4 with
-        | ⟨a, ha⟩, ⟨b, hb⟩, ⟨c, hc⟩ => 
-        have hb' : 3 ∣ 4 * b := by rwa [hb] at h2
-        obtain ⟨k, hk⟩ : 3 ∣ b := by 
-          · have : Prime 3 := by rw [← @Nat.prime_iff]; exact Nat.prime_three
-            apply Or.elim (this.right.right 4 b hb')
-            · intro; simp at *
-            · tauto
-        rw [hk]at hb
-        have hk' : 7 ∣ 12 * k := by rwa [hb, show (4 * (3 * k) = 12 * k) by ring] at h4
-        obtain ⟨r, hr⟩ : 7 ∣ k := by 
-          · have : Prime 7 := by rw [← @Nat.prime_iff]; exact Iff.mpr (Nat.prime_iff_card_units 7) rfl
-            apply Or.elim (this.right.right 12 k hk')
-            · intro; simp at *
-            · tauto 
-        rw [hr] at hb
-        have : y ≥ 84 := by
-          calc
-            y = 4 * (3 * (7 * r)) := by exact hb
-            _ = 84 * r := by ring
-            _ ≥ 84 * 1 := by gcongr; linarith
-        apply absurd this (show ¬y ≥ 84 by rw [@Nat.not_le]; assumption)
-    rw [←h'] at h''
-    contradiction
+    rintro x ⟨h0, h2, ⟨b, rfl⟩, h4⟩
+    rw [Nat.Prime.dvd_mul Nat.prime_three] at h2
+    norm_num at h2
+    rcases h2 with ⟨k, rfl⟩
+    rw [← mul_assoc] at h4
+    rw [Nat.Prime.dvd_mul (by norm_num)] at h4
+    norm_num at h4
+    rcases h4 with ⟨r, rfl⟩ 
+    calc
+        4 * (3 * (7 * r)) = 84 * r := by ring
+                        _ ≥ 84 * 1 := by gcongr; linarith
 
 end Chapter10.Exercise07
