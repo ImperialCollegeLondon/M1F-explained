@@ -9,17 +9,11 @@ Show that if a, b are positive integers and d = gcd(a, b), there exists positive
 that d = s * a - t * b
 -/
 
-lemma part_a (a b : ℕ) (ha : a ≠ 0) (hb : b ≠ 0) : ∃ (s t : ℕ), Nat.gcd a b = s * a - t * b ∧ s ≠ 0 ∧ t ≠ 0 := by
-  let s := Int.gcdA a b
-  let t := - Int.gcdB a b
-  have h₁ : a = Int.natAbs a := by rfl
-  have h₂ : b = Int.natAbs b := by rfl
-  rw [h₁, h₂, ←Int.gcd_eq_natAbs]
-  have h₃ := Int.gcd_eq_gcd_ab a b
-  have h₄ : s > 0 := by sorry
-  have h₅ : t > 0 := by sorry
-sorry
-  #check Int.gcd_eq_natAbs
+lemma part_a (a b : ℤ) (ha : 0 < a) (hb : 0 < b) : 
+  ∃ (s t : ℤ), s > 0 ∧ t > 0 ∧ Int.gcd a b = s * a - t * b := by 
+
+
+  sorry
 
 -- part b
 
