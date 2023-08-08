@@ -14,10 +14,11 @@ lemma part_a (a b : ℤ) (ha : 0 < a) (hb : 0 < b) :
   have := Int.gcd_eq_gcd_ab a b
   set s' := Int.gcdA a b with rfl
   set t' := Int.gcdB a b with rfl
-  set p := max ((b - s') / b) ((a + t') / a)
-  use s' + p * b, p * a - t'
+  set p := max ((s' + b) / b) ((a - t') / a)
+  use s' - p * b, -t' - p * a
   repeat (any_goals constructor)
-  ·sorry -- use method in EX09
+  · 
+    sorry -- use method in EX09
   ·sorry
   ·linear_combination this
 
