@@ -11,6 +11,22 @@ example (a n : ℤ) (hprime : Prime n) (ha :  a < n) : Int.gcd a n = 1 := by sor
 
 example (a n : ℤ) (hprime : Prime n) (ha : ¬n ∣ a) : Int.gcd a n = 1 := by sorry
 #check Int.exists_prime_and_dvd
+#print Nat.Prime 
+#check Nat.prime_iff_prime_int
+#check Int.gcd_eq_natAbs
+
+lemma exercise08' (n : ℤ) (hn : n ≥ 2) : Prime n ↔ ∀ (a : ℤ), Int.gcd a n = 1 ∨ n ∣ a := by
+  rw [show n = n.natAbs by sorry] at *
+  set N := n.natAbs with rfl
+  constructor 
+  <;> intro h 
+  <;> rw [← Nat.prime_iff_prime_int] at *
+  · 
+
+  -- · rw [Nat.prime_iff_prime_int] at h
+  
+
+sorry
 
 lemma exercise08 (n : ℤ) (hn : n ≥ 2) : Prime n ↔ ∀ (a : ℤ), Int.gcd a n = 1 ∨ n ∣ a := by 
   constructor
