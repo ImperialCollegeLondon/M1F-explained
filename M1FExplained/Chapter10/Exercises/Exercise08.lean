@@ -14,14 +14,21 @@ either gcd(a, n) = 1 or n ∣ a.
 #check Nat.prime_def_lt''
 #check Nat.prime_mul_iff
 #check Nat.prime_def_minFac
-#check Nat.prime
+#check Nat.not_eq_zero_of_lt
+#check Int.gcd_eq_zero_iff
+#check Int.gcd_dvd_left
 
-example (n : ℤ) (hn : 2 ≤ n) : n = n.natAbs := by 
-  rw [Int.coe_natAbs]
-  exact Eq.symm (abs_of_nonneg (show 0 ≤ n by linarith))
+example (N a : ℤ) (h : Int.gcd N a = N) := by
+  exact trivial  
+  sorry
 
+example (N a : ℤ) (ha : a ≠ 0) (hN : N ≠ 0) (h : Int.gcd a N = N) : a = N ∨ a = -N := by
+  rw [← @abs_eq_abs]
+  
+  
+  sorry
 
-lemma exercise08' (n : ℤ) (hn : 2 ≤ n) : Prime n ↔ ∀ (a : ℤ), Int.gcd a n = 1 ∨ n ∣ a := by
+lemma exercise08 (n : ℤ) (hn : 2 ≤ n) : Prime n ↔ ∀ (a : ℤ), Int.gcd a n = 1 ∨ n ∣ a := by
   rw [show n = n.natAbs by 
       rw [Int.coe_natAbs] 
       exact Eq.symm (abs_of_nonneg (show 0 ≤ n by linarith))] at *
@@ -29,7 +36,38 @@ lemma exercise08' (n : ℤ) (hn : 2 ≤ n) : Prime n ↔ ∀ (a : ℤ), Int.gcd 
   constructor 
   <;> intro h 
   <;> rw [← Nat.prime_iff_prime_int] at *
-  · sorry
+  · intro a
+    apply Or.elim (Classical.em (N ∣ a.natAbs))
+    <;> intro h'
+    · right
+      exact Iff.mpr Int.ofNat_dvd_left h'
+    · left
+      by_contra h''
+      set M := Int.gcd a N with hM
+      apply Or.elim (Classical.em (a = 0))
+      <;> intro ha
+      · rw [ha] at h'
+        simp at h'
+      · have : M ≠ 0 := by 
+          · intro hM'
+            rw [hM'] at hM
+            have := Eq.symm hM
+            rw [Int.gcd_eq_zero_iff] at this
+            linarith
+        have hM'' : 2 ≤ M := by sorry
+        rw [Nat.prime_def_lt''] at h
+        rcases h with ⟨h1, h2⟩
+        specialize h2 M (show M ∣ N by sorry)
+        apply Or.elim h2
+        <;> intro hM'
+        · contradiction
+        · rw [hM'] at hM 
+          have ha' : a = N := by sorry
+        /- cases h2 with
+        · contradiction -/ 
+        
+        sorry
+
   · rw [Nat.prime_def_lt']
     constructor
     · exact Iff.mp Int.ofNat_le hn
