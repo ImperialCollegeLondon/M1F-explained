@@ -18,13 +18,18 @@ import Mathlib.Data.Nat.Basic
 example {G : Type u_1} [Group G] : (∀ (a b : G), (a*b)^2 = a^2*b^2) → ∀ ( x y : G), y*x = x*y := by
   intro h₀ x y
   have h₁ : (x * y)^2 = x^2 * y^2 := by apply h₀ x y
-  rwa [sq,sq,sq,mul_assoc, mul_assoc,mul_left_cancel_iff,← mul_assoc, ← mul_assoc, mul_right_cancel_iff] at h₁
+  rwa [sq,sq,sq,mul_assoc, mul_assoc,mul_left_cancel_iff,← mul_assoc, ← mul_assoc, 
+    mul_right_cancel_iff] at h₁
 
 --- part b
 
-example {G : Type u_1} [Group G] (i : ℕ) : ∀ a b : G, (a*b)^i = a^i*b^i ∧ (a*b)^(i + 1) = a^(i + 1)*b^(i + 1) ∧
-(a*b)^(i + 2) = a^(i + 2)*b^(i + 2) → a*b = b*a := by
-  intro a b h
+example {G : Type u_1} [Group G] (i : ℕ) : 
+    (∀ a b : G, (a*b)^i = a^i*b^i ∧ 
+                (a*b)^(i + 1) = a^(i + 1)*b^(i + 1) ∧ 
+                (a*b)^(i + 2) = a^(i + 2)*b^(i + 2)) → 
+    ∀ a b : G, a*b = b*a := by
+  intro h a b
+  specialize h a b
   rcases h with ⟨h₀,h₁⟩
   rcases h₁ with ⟨h₁,h₂⟩
   have : i + 2 = i + 1 + 1 := by simp
@@ -40,12 +45,8 @@ example {G : Type u_1} [Group G] (i : ℕ) : ∀ a b : G, (a*b)^i = a^i*b^i ∧ 
 
 --- part c
 
-example {G : Type u_1} [Group G] (i : ℕ) : ¬ ((∀ a b : G, (a*b)^i = a^i*b^i ∧ (a*b)^(i + 1) = a^(i + 1)*b^(i + 1))
-→  ∀ ( x y : G), y*x = x*y) := by
-  intro h
-  by_contra h₀
-  apply h₀
-  
+example {G : Type u_1} [Group G] : ¬ (∀ i : ℕ, ∀ a b : G, (a*b)^i = a^i*b^i ∧ (a*b)^(i + 1) = a^(i + 1)*b^(i + 1)
+    → a*b = b*a) := by
   sorry
 
 
