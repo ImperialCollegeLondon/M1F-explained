@@ -7,10 +7,6 @@ Let n ≥ 2 be an integer. Prove that n is prime if and only if for every intege
 either gcd(a, n) = 1 or n ∣ a. 
 -/
 
-/-
-
--/
-
 lemma exercise08 (n : ℤ) (hn : 2 ≤ n) : Prime n ↔ ∀ (a : ℤ), Int.gcd a n = 1 ∨ n ∣ a := by
   -- Since 2 ≤ n, it is a natural number, we can rewrite this in the local context.
   rw [show n = n.natAbs by 
