@@ -58,8 +58,7 @@ initially find any s, t such that s * a + t * b = gcd(a, b).
 
 lemma helper_2 (a b n : ℤ) (ha : 0 < a) (hb : 0 < b) (hab : ∃ (s t : ℤ), s * a + t * b = n) : 
     ∃ (s' t' : ℤ), 0 < s' ∧ t' < 0 ∧ s' * a + t' * b = n := by 
-    have := helper_1 a b n hb hab
-    match this with
+    match helper_1 a b n hb hab with
     |⟨s, t, ⟨h1, h2⟩⟩ => 
     apply Or.elim (Classical.em (t < 0))
     <;> intro ht
@@ -75,8 +74,7 @@ lemma helper_2 (a b n : ℤ) (ha : 0 < a) (hb : 0 < b) (hab : ∃ (s t : ℤ), s
           exact Int.add_nonneg ht (show 0 ≤ a by exact Int.nonneg_of_pos ha)
       use (s + p * b), (t - p * a)
       repeat (any_goals constructor)
-      · refine add_pos_of_pos_of_nonneg h1 ?hb
-        exact Iff.mpr (zero_le_mul_right hb) hpos
+      · exact add_pos_of_pos_of_nonneg h1 (show _ by exact Iff.mpr (zero_le_mul_right hb) hpos)
       · rw [sub_neg, hp]
         have := @Int.sub_lt_div_mul_self (t + a) a ha
         simp at this
@@ -93,11 +91,10 @@ and part_a deals with this.
 
 lemma part_a (a b : ℤ) (ha : 0 < a) (hb : 0 < b) : 
   ∃ (s t : ℤ), 0 < s ∧ 0 < t ∧ Int.gcd a b = s * a - t * b := by 
-  have := helper_2 a b (Int.gcd a b) ha hb (show _ by {
+  have := helper_2 a b (Int.gcd a b) ha hb (show _ by 
     use Int.gcdA a b, Int.gcdB a b
     simp [mul_comm]
-    exact Eq.symm (Int.gcd_eq_gcd_ab a b)
-  })
+    exact Eq.symm (Int.gcd_eq_gcd_ab a b))
   match this with
   |⟨s, t, ⟨hs, ht, hst⟩⟩ => 
   use s, -t
@@ -107,7 +104,6 @@ lemma part_a (a b : ℤ) (ha : 0 < a) (hb : 0 < b) :
   · rw [Int.neg_mul]
     simp
     exact id (Eq.symm hst)
-
 
 -- part b
 
@@ -139,6 +135,5 @@ These are exatly the integers we found in Exercise 1, and lean finds them for us
 #eval Nat.gcdA 299 345 -- 7
 #eval Nat.gcdB 299 345 -- -6
 -- So 23 = 7 * 299 - 6 * 345, giving s = 7, t = 6
-
 
 end Chapter10.Exercise02
