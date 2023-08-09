@@ -18,15 +18,6 @@ either gcd(a, n) = 1 or n ∣ a.
 #check Int.gcd_eq_zero_iff
 #check Int.gcd_dvd_left
 
-example (N a : ℤ) (h : Int.gcd N a = N) := by
-  exact trivial  
-  sorry
-
-example (N a : ℤ) (ha : a ≠ 0) (hN : N ≠ 0) (h : Int.gcd a N = N) : a = N ∨ a = -N := by
-  rw [← @abs_eq_abs]
-  
-  
-  sorry
 
 lemma exercise08 (n : ℤ) (hn : 2 ≤ n) : Prime n ↔ ∀ (a : ℤ), Int.gcd a n = 1 ∨ n ∣ a := by
   rw [show n = n.natAbs by 
@@ -54,20 +45,18 @@ lemma exercise08 (n : ℤ) (hn : 2 ≤ n) : Prime n ↔ ∀ (a : ℤ), Int.gcd a
             have := Eq.symm hM
             rw [Int.gcd_eq_zero_iff] at this
             linarith
-        have hM'' : 2 ≤ M := by sorry
         rw [Nat.prime_def_lt''] at h
         rcases h with ⟨h1, h2⟩
-        specialize h2 M (show M ∣ N by sorry)
+        specialize h2 M (show M ∣ N by 
+          rw [Int.gcd_dvd_iff]
+          use 0, 1
+          ring
+        )
         apply Or.elim h2
         <;> intro hM'
         · contradiction
         · rw [hM'] at hM 
-          have ha' : a = N := by sorry
-        /- cases h2 with
-        · contradiction -/ 
-        
-        sorry
-
+          apply absurd (show N ∣ Int.natAbs a by exact Iff.mpr Nat.gcd_eq_right_iff_dvd hM') h'
   · rw [Nat.prime_def_lt']
     constructor
     · exact Iff.mp Int.ofNat_le hn
@@ -80,8 +69,5 @@ lemma exercise08 (n : ℤ) (hn : 2 ≤ n) : Prime n ↔ ∀ (a : ℤ), Int.gcd a
         linarith
       · have := @Nat.le_of_dvd N m (show 0 < m by exact Nat.lt_of_succ_lt hm1) (show N ∣ m by exact Iff.mp Int.ofNat_dvd hm3)
         linarith
-      
-
-sorry
 
 end Chapter10.Exercise08
