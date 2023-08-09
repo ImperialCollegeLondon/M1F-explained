@@ -9,6 +9,20 @@ Show that if a, b are positive integers and d = gcd(a, b), there exists positive
 that d = s * a - t * b
 -/
 
+/-
+The key to the solution to the question is the following trick:
+
+s * a + t * b = (s + p * b) * a + (t - p * a) * b for any positive integer p.
+
+Thus we can make the coefficients of a, b as positive/negative as we like.
+-/
+
+/-
+First of all, a few helper lemmas are proven. The first two deal with the nuances of integer division
+in Lean. The last two solve the bulk of the question, leaving only a small amount of work to be done 
+in the actual question statment.
+-/
+
 lemma Int.sub_ediv_of_dvd_right {a b c : ℤ} (H : c ∣ b) : (a - b) / c = a / c - b / c := by
   simp only [sub_eq_add_neg, Int.add_ediv_of_dvd_right <| Int.dvd_neg.2 H, Int.neg_ediv_of_dvd H]
 
@@ -18,6 +32,11 @@ lemma Int.sub_lt_div_mul_self {a b : ℤ} (hb : 0 < b) : a - b < a / b * b := by
   have := Int.le_ediv_of_mul_le hb h
   rw [Int.sub_ediv_of_dvd_right <| dvd_rfl, Int.ediv_self hb.ne'] at this
   linarith
+
+/- 
+helper_1 says that given s * a + t * b = n, we can find new coefficients s', t' for a, b 
+with 0 < s' so the same equality holds.
+-/
 
 lemma helper_1 (a b n : ℤ) (hb : 0 < b) (hab : ∃ (s t : ℤ), s * a + t * b = n) : 
     ∃ (s' t' : ℤ), 0 < s' ∧ s' * a + t' * b = n := by 
@@ -30,6 +49,12 @@ lemma helper_1 (a b n : ℤ) (hb : 0 < b) (hab : ∃ (s t : ℤ), s * a + t * b 
       -s = (b - s) - b := by norm_num
       _ < (b - s) / b * b := by exact Int.sub_lt_div_mul_self hb
   · linear_combination hst
+
+/-
+helper_2 builds on helper_1 but now adds the restriction that the new coefficient t' satisfies t' < 0.
+This effectivley solves the question, save for some changes of sign and the assumption that we can 
+initially find any s, t such that s * a + t * b = gcd(a, b).
+-/
 
 lemma helper_2 (a b n : ℤ) (ha : 0 < a) (hb : 0 < b) (hab : ∃ (s t : ℤ), s * a + t * b = n) : 
     ∃ (s' t' : ℤ), 0 < s' ∧ t' < 0 ∧ s' * a + t' * b = n := by 
@@ -58,6 +83,13 @@ lemma helper_2 (a b n : ℤ) (ha : 0 < a) (hb : 0 < b) (hab : ∃ (s t : ℤ), s
         assumption
       · linear_combination h2 
 
+/-
+The final statment of the question consistient with that in the book. helper_2 states
+the equality s' * a + t' * b = n with 0 < s' and t' < 0. 
+
+However, we want s' * a - t' * b = n with 0 < s' and 0 < t'. These are of course equivalent,
+and part_a deals with this. 
+-/
 
 lemma part_a (a b : ℤ) (ha : 0 < a) (hb : 0 < b) : 
   ∃ (s t : ℤ), 0 < s ∧ 0 < t ∧ Int.gcd a b = s * a - t * b := by 
