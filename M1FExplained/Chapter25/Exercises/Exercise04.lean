@@ -22,10 +22,12 @@ example {G : Type u_1} [CommGroup G] (a b : G) (n : ℕ) : (a*b)^n = a^n*b^n := 
 --- part b)
 /- Here G = S_3, n = 1, a = (1 2) and b = (2 3) -/
 
-example : ∃ (a b : Equiv.Perm (Fin 3)),  (a * b) i ≠ (b * a) i := by
+example : ∃ (a b : Equiv.Perm (Fin 3)),  (a * b) ≠ (b * a) := by
   use Equiv.swap 0 1
   use Equiv.swap 1 2
   intro h
-  rcases i with  ⟨i, i_is_lt⟩
-  sorry
-
+  have h₂ : (1 : Fin 3) = 2 := by calc
+    (1 : Fin 3) = (Equiv.swap 0 1 * Equiv.swap 1 2 : Equiv.Perm (Fin 3)) 0 := by rfl
+    _           = (Equiv.swap 1 2 * Equiv.swap 0 1 : Equiv.Perm (Fin 3)) 0 := by rw [h]
+  revert h₂
+  decide
