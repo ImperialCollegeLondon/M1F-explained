@@ -119,3 +119,6 @@ ex 1 parts a-c done, part d the statement is formalised but no proof
 
 Q1-9 statements formalised, no proofs
 
+## Chapter 25 
+
+Ex 3 done, Ex 5 parts a and b done. Ex 1 part i done, Ex 7 progress
