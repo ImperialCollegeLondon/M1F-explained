@@ -56,27 +56,53 @@ noncomputable instance : Group complex_size_1 where
 abbrev real_not_minus_1 :=
 {x : ℝ // x ≠ -1}
 
+
 namespace real_not_minus_1
 
-instance one : One real_not_minus_1 := ⟨1,  by norm_num⟩ 
+instance zero : Zero real_not_minus_1 := ⟨0,  by norm_num⟩ 
 
-lemma mul_closed2 (a b : real_not_minus_1) : (a : ℝ) * b + a + b ≠ -1 := by
+lemma add_closed2 (a b : real_not_minus_1) : (a : ℝ) * b + a + b ≠ -1 := by
   by_contra h
   sorry
 
+@[simp,norm_cast]
+lemma coe_zero : ((0 : real_not_minus_1) : ℝ) = 0 := by rfl 
 
+instance : Add real_not_minus_1 where
+  add a b :=  ⟨a.1 * b.1 + a.1 + b.1, add_closed2 a b⟩
 
+@[norm_cast]
+lemma rnm1_coe_add (a b : real_not_minus_1) : (a + b : real_not_minus_1) = (a : ℝ) * b + a + b := by rfl
 
-instance : Group (real_not_minus_1) where
-  mul a b :=  ⟨a.1 * b.1 + a.1 + b.1, mul_closed2 a b⟩ 
-  mul_assoc := by
-    intro a b c
-    ext1
+lemma add_assoc2 (a b c : real_not_minus_1) : a + b + c = a + (b + c) := by
+  ext
+  push_cast
+  ring
+
+example (a : real_not_minus_1) : -a.1/(a.1 + 1) ≠ -1 := by
+  intro h
+  have : -a.1 = -1 * (a.1 + 1) := by
     sorry
-  one_mul := sorry
-  mul_one := sorry
-  inv := sorry
-  mul_left_inv := sorry
+  sorry
+
+noncomputable instance : Neg real_not_minus_1 where
+  neg a := ⟨-a/(a + 1), sorry⟩   
+
+instance : AddGroup real_not_minus_1 where
+  add_assoc := add_assoc2
+  zero_add := by
+    intro a
+    ext
+    push_cast
+    norm_num
+  add_zero := by
+    intro a
+    ext
+    push_cast
+    norm_num
+  neg a := ⟨-a, sorry⟩ 
+  add_left_neg := sorry
+
 
 -- part iv
 
