@@ -144,7 +144,6 @@ noncomputable instance : AddGroup real_not_minus_1 where
           intro h₀
           apply this
           exact Iff.mp add_eq_zero_iff_eq_neg h₀
-        have h : a.1 = a.1/(a.1 + 1) * (a.1 + 1) := Iff.mp (div_eq_iff this) rfl
         exact Iff.mpr (eq_div_iff this) rfl
       _ = 0 := by ring
 
