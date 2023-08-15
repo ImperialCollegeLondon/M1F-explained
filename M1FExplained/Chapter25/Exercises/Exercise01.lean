@@ -5,8 +5,6 @@ import Mathlib.Data.Nat.Basic
 abbrev complex_size_1 :=
 { z : ℂ // ‖z‖  = 1 }
 
-namespace complex_size_1
-
 instance one : One complex_size_1 := ⟨1,  by exact CstarRing.norm_one⟩
 
 @[simp]
@@ -56,14 +54,29 @@ noncomputable instance : Group complex_size_1 where
 abbrev real_not_minus_1 :=
 {x : ℝ // x ≠ -1}
 
-
-namespace real_not_minus_1
-
 instance zero : Zero real_not_minus_1 := ⟨0,  by norm_num⟩ 
 
 lemma add_closed2 (a b : real_not_minus_1) : (a : ℝ) * b + a + b ≠ -1 := by
   by_contra h
-  sorry
+  have h₁ : (a.1 + 1) * (b.1 + 1) = 0 :=
+    calc
+      (a.1 + 1) * (b.1 + 1) = a.1 * b.1 + a.1 + b.1 + 1 := by ring
+      _ = 0 := by
+        rw [h]
+        norm_num
+  have h₂ : a.1 + 1 = 0 ∨ b.1 + 1 = 0 := Iff.mp zero_eq_mul (id (Eq.symm h₁))
+  have h₃ : a.1 = -1 ∨ b.1 = -1 := by 
+    rcases h₂ with (h | h₁)
+    left
+    exact Iff.mp add_eq_zero_iff_eq_neg h
+    right
+    exact Iff.mp add_eq_zero_iff_eq_neg h₁
+  unfold real_not_minus_1 at a b
+  rcases h₃ with (h₄|h₅)
+  have := a.2
+  exact this h₄
+  have := b.2
+  exact this h₅
 
 @[simp,norm_cast]
 lemma coe_zero : ((0 : real_not_minus_1) : ℝ) = 0 := by rfl 
@@ -79,16 +92,34 @@ lemma add_assoc2 (a b c : real_not_minus_1) : a + b + c = a + (b + c) := by
   push_cast
   ring
 
-example (a : real_not_minus_1) : -a.1/(a.1 + 1) ≠ -1 := by
+lemma neg_real_neq_one (a : real_not_minus_1) : -a.1/(a.1 + 1) ≠ -1 := by
   intro h
-  have : -a.1 = -1 * (a.1 + 1) := by
-    sorry
-  sorry
+  simp at h
+  have : a.1 + 1 ≠ 0 := by
+    have := a.2
+    intro h₀
+    apply this
+    exact Iff.mp add_eq_zero_iff_eq_neg h₀
+  have h₁ : a.1/(a.1 + 1) = 1  := by
+    calc
+      a.1/ (a.1 + 1) = -(-a.1/(a.1 + 1)) := by ring
+      _ = -(-1) := by rw [h]
+    ring
+  have h₂ : a.1 = a.1 + 1 := by
+    calc
+      a.1 = a.1/(a.1 + 1) * (a.1 + 1) := Iff.mp (div_eq_iff this) rfl
+      _ = a.1 + 1 := by
+        rw [h₁]
+        ring
+  simp at h₂
 
 noncomputable instance : Neg real_not_minus_1 where
-  neg a := ⟨-a/(a + 1), sorry⟩   
+  neg a := ⟨-a/(a + 1), neg_real_neq_one a⟩
 
-instance : AddGroup real_not_minus_1 where
+@[norm_cast]
+lemma coe_neg (a : real_not_minus_1) : (-a : real_not_minus_1) = -(a : ℝ)/(a+1) := by rfl
+
+noncomputable instance : AddGroup real_not_minus_1 where
   add_assoc := add_assoc2
   zero_add := by
     intro a
@@ -100,23 +131,51 @@ instance : AddGroup real_not_minus_1 where
     ext
     push_cast
     norm_num
-  neg a := ⟨-a, sorry⟩ 
-  add_left_neg := sorry
-
+  add_left_neg := by
+    intro a
+    unfold real_not_minus_1
+    ext
+    push_cast
+    calc
+      _ = -a.1/(a.1+1) *a.1 + -a.1/(a.1 + 1) + (a.1 * (a.1 +1))/(a.1 + 1) := by
+        simp
+        have : a.1 + 1 ≠ 0 := by
+          have := a.2
+          intro h₀
+          apply this
+          exact Iff.mp add_eq_zero_iff_eq_neg h₀
+        have h : a.1 = a.1/(a.1 + 1) * (a.1 + 1) := Iff.mp (div_eq_iff this) rfl
+        exact Iff.mpr (eq_div_iff this) rfl
+      _ = 0 := by ring
 
 -- part iv
 
-def part_iv :=
+abbrev part_iv :=
 { x : ℝ // x ≥ 0}
 
-noncomputable instance monoid_part_iv : AddMonoid part_iv where
-  add a b:= ⟨max a.1 b.1,sorry⟩
+
+instance zero_part_iv : Zero part_iv := ⟨0,  by norm_num⟩ 
+
+lemma add_close_part_iv (a b : part_iv) : max a.1 b.1 ≥ 0 := by
+  rcases a with ⟨a,ha⟩
+  rcases b with ⟨b,hb⟩
+  simp
+  exact Or.inr hb
+
+noncomputable instance add_part_iv : Add part_iv where
+  add a b:= ⟨max a.1 b.1, add_close_part_iv a b⟩
+
+
+/- noncomputable instance monoid_part_iv : AddMonoid part_iv where
+  add a b:= ⟨max a.1 b.1,  sorry⟩
   add_assoc := sorry
   zero := ⟨0,sorry ⟩
   zero_add := sorry
-  add_zero := sorry
+  add_zero := sorry -/
 
-example (a b : part_iv): a+b ≠ 0 := sorry
+example (a b : part_iv) (h : a > 0): a.1 + b.1 ≠ 0 := by
+  
+  sorry
 
 --- part v
 
