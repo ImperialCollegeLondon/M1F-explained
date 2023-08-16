@@ -164,24 +164,24 @@ lemma add_close_part_iv (a b : part_iv) : max a.1 b.1 ≥ 0 := by
 noncomputable instance add_part_iv : Add part_iv where
   add a b:= ⟨max a.1 b.1, add_close_part_iv a b⟩
 
+@[simp]
+lemma add_part_iv_coe (a b : part_iv): (a + b : part_iv) = max (a : ℝ) b := by rfl 
 
-/- noncomputable instance monoid_part_iv : AddMonoid part_iv where
-  add a b:= ⟨max a.1 b.1,  sorry⟩
-  add_assoc := sorry
-  zero := ⟨0,sorry ⟩
-  zero_add := sorry
-  add_zero := sorry -/
-
-example (a b : part_iv) (h : a > 0): a.1 + b.1 ≠ 0 := by
-  
-  sorry
+example (a b : part_iv) (h : a.1 > 0): a.1 + b.1 ≠ 0 := by
+  intro h₀
+  norm_cast at h₀
+  simp at h₀
+  rcases h₀ with ⟨ha⟩
+  have : a ≠ 0 := ne_of_gt h
+  exact this ha
 
 --- part v
 
 def part_v : Set ℂ :=
 {z | z^3 - z^2 + z - 1 = 0}
 
-example : ∃ a ∈  part_v, ∃ b ∈ part_v, ¬ a*b ∈ part_v := sorry
+example : ∃ a ∈  part_v, ∃ b ∈ part_v, ¬ a*b ∈ part_v := by
+  sorry
 
 --- part vi
 
