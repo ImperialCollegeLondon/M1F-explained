@@ -46,7 +46,7 @@ lemma helper (a b n : ℤ) (hb : 0 < b) (hab : ∃ (s t : ℤ), s * a + t * b = 
   constructor
   · rw [hp, ← neg_lt_iff_pos_add']
     calc
-      -s = (b - s) - b := by norm_num
+      -s = (b - s) - b := by simp
       _ < (b - s) / b * b := by exact Int.sub_lt_div_mul_self hb
   · linear_combination hst
 
@@ -63,7 +63,7 @@ lemma exercise09 (a b : ℤ) (hb : b > 0) (hab : IsCoprime a b) :
     · use n * s', n * t'
       calc
         _ = n * (s' * a + t' * b) := by ring
-        _ = n := by rw [hst]; norm_num
+        _ = n := by rw [hst]; simp
   exact helper a b n hb hab
 
 end Chapter10.Exercise09
