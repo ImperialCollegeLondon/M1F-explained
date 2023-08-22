@@ -9,9 +9,7 @@ either gcd(a, n) = 1 or n ∣ a.
 
 lemma exercise08 (n : ℤ) (hn : 2 ≤ n) : Prime n ↔ ∀ (a : ℤ), Int.gcd a n = 1 ∨ n ∣ a := by
   -- Since 2 ≤ n, it is a natural number, we can rewrite this in the local context.
-  rw [show n = n.natAbs by 
-      rw [Int.coe_natAbs] 
-      exact Eq.symm (abs_of_nonneg (show 0 ≤ n by linarith))] at *
+  rw [← Int.natAbs_of_nonneg (show 0 ≤ n by linarith)] at *
   -- N is the coercion on n to the natural numbers.
   set N := n.natAbs
   constructor 
@@ -29,32 +27,26 @@ lemma exercise08 (n : ℤ) (hn : 2 ≤ n) : Prime n ↔ ∀ (a : ℤ), Int.gcd a
     · left
       by_contra h''
       set M := Int.gcd a N with hM
-  -- Condition on wether a = 0 or not.
-      apply Or.elim (Classical.em (a = 0))
-      <;> intro ha
-  -- If a = 0, then N ∣ a, which contradicts h'
-      · rw [ha] at h'
-        simp at h'
-  -- If a ≠ 0, then M = gcd(a, N) divides N, and so is equal to 1 or N, both of which are contradictions.
-      · have : M ≠ 0 := by 
-          · intro hM'
-            rw [hM'] at hM
-            have := Eq.symm hM
-            rw [Int.gcd_eq_zero_iff] at this
-            linarith
-        rw [Nat.prime_def_lt''] at h
-        rcases h with ⟨h1, h2⟩
-        specialize h2 M (show M ∣ N by 
-          rw [Int.gcd_dvd_iff]
-          use 0, 1
-          ring)
-        apply Or.elim h2
-        <;> intro hM''
-  -- Can't have M = 1, since we assume this wasn't the case.
-        · contradiction
-  -- If M = N, then N ∣ a, which we also assumed wasn't the case.
-        · rw [hM''] at hM 
-          apply absurd (show N ∣ Int.natAbs a by exact Iff.mpr Nat.gcd_eq_right_iff_dvd hM'') h'
+  -- M = gcd(a, N) divides N, and so is equal to 1 or N, both of which are contradictions.
+      have : M ≠ 0 := by 
+        · intro hM'
+          rw [hM'] at hM
+          have := Eq.symm hM
+          rw [Int.gcd_eq_zero_iff] at this
+          linarith
+      rw [Nat.prime_def_lt''] at h
+      rcases h with ⟨h1, h2⟩
+      specialize h2 M (show M ∣ N by 
+        rw [Int.gcd_dvd_iff]
+        use 0, 1
+        ring)
+      apply Or.elim h2
+      <;> intro hM''
+-- Can't have M = 1, since we assume this wasn't the case.
+      · contradiction
+-- If M = N, then N ∣ a, which we also assumed wasn't the case.
+      · rw [hM''] at hM 
+        apply absurd (show N ∣ Int.natAbs a by exact Iff.mpr Nat.gcd_eq_right_iff_dvd hM'') h'
   -- ← direction.
   -- A natural number is prime if and only if any number less than it and greater than 1 doesn't divide it.
   · rw [Nat.prime_def_lt']
