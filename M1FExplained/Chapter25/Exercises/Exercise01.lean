@@ -129,7 +129,6 @@ noncomputable instance : AddGroup real_not_minus_1 where
     norm_num
   add_left_neg := by
     intro a
-    unfold real_not_minus_1
     ext
     push_cast
     calc
