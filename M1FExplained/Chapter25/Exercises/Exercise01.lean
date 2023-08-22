@@ -42,7 +42,7 @@ noncomputable instance : Group complex_size_1 where
     intro a
     ext1
     simp
-  inv z := ⟨z.1⁻¹, by rw [norm_inv,z.2,inv_one]⟩
+  inv z := ⟨z.1⁻¹, by rw [norm_inv,z.2, inv_one]⟩
   mul_left_inv := by
     intro a
     ext1
