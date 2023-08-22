@@ -20,7 +20,7 @@ lemma exercise08 (n : ℤ) (hn : 2 ≤ n) : Prime n ↔ ∀ (a : ℤ), Int.gcd a
   -- Condition on whether N divides |a|.
     apply Or.elim (Classical.em (N ∣ a.natAbs))
     <;> intro h'
-  -- If N ∣ |a|, then trivially N ∣ |a|.
+  -- If N ∣ |a|, then trivially N ∣ a.
     · right
       exact Iff.mpr Int.ofNat_dvd_left h'
   -- If ¬ N ∣ |a|, then since N is prime, gcd(N, a) = 1. This is proven by contradiction.
