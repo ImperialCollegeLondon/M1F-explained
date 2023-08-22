@@ -24,7 +24,7 @@ lemma closed_mul (a b : set1) : (↑a : ℂ) * b ∈ set1 := by
 
 
 instance : Mul set1 where
-  mul a b := ⟨a.1*b.1,closed_mul a b⟩
+  mul a b := ⟨a.1 * b.1, closed_mul a b⟩
 
 @[simp,norm_cast]  
 lemma set1_coe_mul (a b : set1) : (a * b : set1) = (a : ℂ) * b := by rfl
