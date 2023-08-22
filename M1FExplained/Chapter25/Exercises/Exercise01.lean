@@ -68,7 +68,7 @@ lemma add_closed2 (a b : real_not_minus_1) : (a : ℝ) * b + a + b ≠ -1 := by
   have h₃ : a.1 = -1 ∨ b.1 = -1 := by 
     rcases h₂ with (h | h₁)
     left
-    exact Iff.mp add_eq_zero_iff_eq_neg h
+    rwa [← add_eq_zero_iff_eq_neg]
     right
     exact Iff.mp add_eq_zero_iff_eq_neg h₁
   unfold real_not_minus_1 at a b
