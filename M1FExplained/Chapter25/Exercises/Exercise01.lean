@@ -72,10 +72,8 @@ lemma add_closed2 (a b : real_not_minus_1) : (a : ℝ) * b + a + b ≠ -1 := by
     right
     exact Iff.mp add_eq_zero_iff_eq_neg h₁
   rcases h₃ with (h₄|h₅)
-  have := a.2
-  exact this h₄
-  have := b.2
-  exact this h₅
+  · exact a.2 h₄
+  · exact b.2 h₅
 
 @[simp,norm_cast]
 lemma coe_zero : ((0 : real_not_minus_1) : ℝ) = 0 := by rfl 
