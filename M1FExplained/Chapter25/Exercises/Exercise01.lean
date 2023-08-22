@@ -11,7 +11,7 @@ instance one : One complex_size_1 := ⟨1,  by exact CstarRing.norm_one⟩
 lemma coe_one : (↑(1 : complex_size_1) : ℂ) = 1 := by rfl
 
 lemma mul_closed (a b : complex_size_1) : ‖(a : ℂ) * b‖ = 1 := by
-  rw [norm_mul, a.2,b.2,mul_one]
+  rw [norm_mul, a.2,b.2, mul_one]
 
 --- part i
 
