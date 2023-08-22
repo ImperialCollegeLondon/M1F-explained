@@ -12,13 +12,6 @@ a) Use Proposition 26.7 to find the remainder when 3798 is divided by 24.
 example :  37^98 ≡ 1 [MOD 24] := by norm_num 
 
 --- part b)
-example (a n : ℕ) (h₀ : a > 0) (h₁ : b > 0) (h₂ : a.coprime n): ¬ (a^2 ≡ 1 [MOD n] → (a ≡  1 [MOD n])
-∨ (a ≡ n-1 [MOD n])) := by
-  intro h
-  have : 4^2 ≡ 1 [MOD 15] := by norm_num 
-  have hh: 4 ≡ 1 [MOD 15] ∨ 4 ≡ 15-1 [MOD 15]:= by 
-    
-    sorry
-  rcases this with ⟨a,b⟩
-  norm_num at hh
+example : ¬ ∃ (a b n : ℕ), a > 0 ∧  b > 0 ∧  a.coprime n ∧ (a^2 ≡ 1 [MOD n] → (a ≡  1 [MOD n])
+∨ (a ≡ n-1 [MOD n])) := sorry
 
