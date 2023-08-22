@@ -52,7 +52,7 @@ lemma helper_1 (a b n : ℤ) (hb : 0 < b) (hab : ∃ (s t : ℤ), s * a + t * b 
 
 /-
 helper_2 builds on helper_1 but now adds the restriction that the new coefficient t' satisfies t' < 0.
-This effectivley solves the question, save for some changes of sign and the assumption that we can 
+This effectively solves the question, save for some changes of sign and the assumption that we can 
 initially find any s, t such that s * a + t * b = gcd(a, b).
 -/
 
@@ -60,25 +60,20 @@ lemma helper_2 (a b n : ℤ) (ha : 0 < a) (hb : 0 < b) (hab : ∃ (s t : ℤ), s
     ∃ (s' t' : ℤ), 0 < s' ∧ t' < 0 ∧ s' * a + t' * b = n := by 
     match helper_1 a b n hb hab with
     |⟨s, t, ⟨h1, h2⟩⟩ => 
-    apply Or.elim (Classical.em (t < 0))
-    <;> intro ht
+    rcases lt_or_le t 0 with (ht | ht)
     · use s, t
-      repeat (any_goals constructor)
-      all_goals assumption
     · push_neg at ht
       set p := (t + a) / a with hp
       have hpos : 0 ≤ p := by 
-        · rw [hp]
-          refine Iff.mpr (Int.le_ediv_iff_mul_le ha) ?_
+        · rw [hp, Int.le_ediv_iff_mul_le ha]
           norm_num
-          exact Int.add_nonneg ht (show 0 ≤ a by exact Int.nonneg_of_pos ha)
+          exact Int.add_nonneg ht ha.le
       use (s + p * b), (t - p * a)
       repeat (any_goals constructor)
-      · exact add_pos_of_pos_of_nonneg h1 (show _ by exact Iff.mpr (zero_le_mul_right hb) hpos)
+      · exact add_pos_of_pos_of_nonneg h1 (Iff.mpr (zero_le_mul_right hb) hpos)
       · rw [sub_neg, hp]
         have := @Int.sub_lt_div_mul_self (t + a) a ha
-        simp at this
-        assumption
+        simpa 
       · linear_combination h2 
 
 /-
@@ -91,10 +86,9 @@ and part_a deals with this.
 
 lemma part_a (a b : ℤ) (ha : 0 < a) (hb : 0 < b) : 
   ∃ (s t : ℤ), 0 < s ∧ 0 < t ∧ Int.gcd a b = s * a - t * b := by 
-  have := helper_2 a b (Int.gcd a b) ha hb (show _ by 
+  have := helper_2 a b (Int.gcd a b) ha hb (by 
     use Int.gcdA a b, Int.gcdB a b
-    simp [mul_comm]
-    exact Eq.symm (Int.gcd_eq_gcd_ab a b))
+    simp [mul_comm, Int.gcd_eq_gcd_ab])
   match this with
   |⟨s, t, ⟨hs, ht, hst⟩⟩ => 
   use s, -t
@@ -102,8 +96,7 @@ lemma part_a (a b : ℤ) (ha : 0 < a) (hb : 0 < b) :
   · assumption
   · exact Int.neg_pos_of_neg ht
   · rw [Int.neg_mul]
-    simp
-    exact id (Eq.symm hst)
+    simp [hst]
 
 -- part b
 
