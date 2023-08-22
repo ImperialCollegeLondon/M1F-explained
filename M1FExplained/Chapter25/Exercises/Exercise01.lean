@@ -93,9 +93,8 @@ lemma neg_real_neq_one (a : real_not_minus_1) : -a.1 / (a.1 + 1) ≠ -1 := by
   intro h
   simp at h
   have : a.1 + 1 ≠ 0 := by
-    have := a.2
     intro h₀
-    apply this
+    apply a.2
     exact Iff.mp add_eq_zero_iff_eq_neg h₀
   have h₁ : a.1 / (a.1 + 1) = 1  := by
     calc
