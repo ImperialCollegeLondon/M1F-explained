@@ -31,7 +31,15 @@ Ex 7 : statement formalised
 
 Ex 8 : done
 
-## Chapters 3 to 7
+## Chapters 3 to 5
+
+No statements have been formalised here.
+
+## Chapter 6
+
+Ex 1 : done
+
+## Chapter 7
 
 No statements have been formalised here.
 
@@ -57,9 +65,13 @@ No statements have been formalised here.
 
 Ex 1 : done
 Ex 2 : done
-Ex 3 : part a, b done. Part c statment done
-Ex 4 : part a statment done, parts b, c mostly done
-Ex 5 : part a done, part b statment done, part c one sorry left.
+Ex 3 : part a, b done. Part c statment
+Ex 4 : done
+Ex 5 : done
+
+Ex 7 : done
+
+
 
 ## Chapters 11-12
 
