@@ -137,7 +137,7 @@ noncomputable instance : AddGroup real_not_minus_1 where
         have : a.1 + 1 ≠ 0 := by
           have := a.2
           intro h₀
-          apply this
+          apply a.2
           exact Iff.mp add_eq_zero_iff_eq_neg h₀
         exact Iff.mpr (eq_div_iff this) rfl
       _ = 0 := by ring
