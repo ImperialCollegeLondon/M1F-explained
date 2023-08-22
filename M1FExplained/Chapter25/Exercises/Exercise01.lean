@@ -24,7 +24,7 @@ lemma coe_mul (a b : complex_size_1) : (↑(a * b) : ℂ) = ↑a * ↑b := by
 lemma ne_zero (a : complex_size_1) : (a : ℂ) ≠ 0 := by
   intro h
   apply_fun norm at h
-  rw [a.2, norm_zero,] at h
+  rw [a.2, norm_zero] at h
   norm_num at h
 
 noncomputable instance : Group complex_size_1 where
