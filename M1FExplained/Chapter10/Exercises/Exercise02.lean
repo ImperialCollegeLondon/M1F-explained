@@ -26,7 +26,7 @@ in the actual question statment.
 lemma Int.sub_ediv_of_dvd_right {a b c : ℤ} (H : c ∣ b) : (a - b) / c = a / c - b / c := by
   simp only [sub_eq_add_neg, Int.add_ediv_of_dvd_right <| Int.dvd_neg.2 H, Int.neg_ediv_of_dvd H]
 
-lemma Int.sub_lt_div_mul_self {a b : ℤ} (hb : 0 < b) : a - b < a / b * b := by
+lemma Int.sub_lt_div_mul_self (a : ℤ) {b : ℤ} (hb : 0 < b) : a - b < a / b * b := by
   by_contra h
   push_neg at h
   have := Int.le_ediv_of_mul_le hb h
@@ -46,8 +46,8 @@ lemma helper_1 (a b n : ℤ) (hb : 0 < b) (hab : ∃ (s t : ℤ), s * a + t * b 
   constructor
   · rw [hp, ← neg_lt_iff_pos_add']
     calc
-      -s = (b - s) - b := by norm_num
-      _ < (b - s) / b * b := by exact Int.sub_lt_div_mul_self hb
+      -s = (b - s) - b := by simp
+      _ < (b - s) / b * b := by exact Int.sub_lt_div_mul_self _ hb
   · linear_combination hst
 
 /-
@@ -62,18 +62,16 @@ lemma helper_2 (a b n : ℤ) (ha : 0 < a) (hb : 0 < b) (hab : ∃ (s t : ℤ), s
     |⟨s, t, ⟨h1, h2⟩⟩ => 
     rcases lt_or_le t 0 with (ht | ht)
     · use s, t
-    · push_neg at ht
-      set p := (t + a) / a with hp
+    · set p := (t + a) / a with hp
       have hpos : 0 ≤ p := by 
-        · rw [hp, Int.le_ediv_iff_mul_le ha]
-          norm_num
+        · rw [hp, Int.le_ediv_iff_mul_le ha, zero_mul]
           exact Int.add_nonneg ht ha.le
       use (s + p * b), (t - p * a)
       repeat (any_goals constructor)
       · exact add_pos_of_pos_of_nonneg h1 (Iff.mpr (zero_le_mul_right hb) hpos)
       · rw [sub_neg, hp]
-        have := @Int.sub_lt_div_mul_self (t + a) a ha
-        simpa 
+        have := Int.sub_lt_div_mul_self (t + a) ha
+        simpa
       · linear_combination h2 
 
 /-
