@@ -21,8 +21,6 @@ lemma closed_mul (a b : set1) : (↑a : ℂ) * b ∈ set1 := by
   cases' b with b hb
   rcases ha with (rfl|rfl|rfl|rfl) <;> rcases hb with (rfl|rfl|rfl|rfl) <;> norm_num
 
-
-
 instance : Mul set1 where
   mul a b := ⟨a.1 * b.1, closed_mul a b⟩
 
