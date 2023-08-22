@@ -8,13 +8,13 @@ abbrev set2 : Set ℤ := {1, -1}
 def D := set1 × set2
 
 instance : One set1 where
-  one := ⟨1,by tauto⟩
+  one := ⟨1, by tauto⟩
 
 @[simp,norm_cast]
 lemma set_one_coe_one : ((1 : set1) : ℂ) = 1 := rfl
 
 instance : One set2 where
-  one := ⟨1,by tauto⟩
+  one := ⟨1, by tauto⟩
 
 lemma closed_mul (a b : set1) : (↑a : ℂ) * b ∈ set1 := by
   cases' a with a ha
@@ -33,7 +33,7 @@ lemma closed_mul2 (a b : set2) : (a : ℤ) * b ∈ set2 := by
   rcases ha with (rfl|rfl) <;> rcases hb with (rfl|rfl) <;> norm_num
 
 instance : Mul set2 where
-  mul a b := ⟨a*b,closed_mul2 a b⟩
+  mul a b := ⟨a * b, closed_mul2 a b⟩
 
 @[norm_cast]
 lemma set2_coe_mul (a b : set2): (a * b : set2) = (a : ℤ) * b := by rfl
@@ -45,34 +45,33 @@ lemma closed_pow (a : set1) (c : set2) : (a : ℂ) ^ (c : ℤ) ∈ set1 := by
   right
   right
   left
-  simp
   rw [inv_neg]
   norm_num
 
 
 noncomputable instance : HPow set1 set2 set1 where
-  hPow a c := ⟨a.1^c.1, closed_pow a c⟩   
+  hPow a c := ⟨a.1 ^ c.1, closed_pow a c⟩   
 
 @[simp,norm_cast]
-lemma coe_pow (a : set1) (b : set2) : (a^b : set1) = (a : ℂ)^(b : ℤ) := by rfl
+lemma coe_pow (a : set1) (b : set2) : (a ^ b : set1) = (a : ℂ) ^ (b : ℤ) := by rfl
 
 noncomputable instance : Mul D where 
-  mul a b := ⟨a.1*b.1^a.2,a.2*b.2⟩
+  mul a b := ⟨a.1 * b.1 ^ a.2, a.2*b.2⟩
 
 @[simp]
-lemma mul_first (a b : D): (a * b).fst = a.1*b.1^a.2 := by rfl
+lemma mul_first (a b : D): (a * b).fst = a.1 * b.1 ^ a.2 := by rfl
 
 @[simp]
 lemma mul_snd (a b : D) : (a * b).snd = a.2 * b.2 := by rfl
 
-lemma mul_assocD (a b c : D): a*b*c = a * (b * c) := by
+lemma mul_assocD (a b c : D): a * b * c = a * (b * c) := by
   unfold D
-  ext1
-  · repeat rw[mul_first]
+  apply Prod.ext
+  · repeat rw [mul_first]
     rw [mul_snd]
     ext1
     push_cast
-    rw [mul_zpow,mul_comm (a.snd : ℤ),zpow_mul,mul_assoc]
+    rw [mul_zpow, mul_comm (a.snd : ℤ), zpow_mul,mul_assoc]
   · repeat rw [mul_snd]
     ext
     push_cast
@@ -83,11 +82,11 @@ instance : One D := ⟨(1,1)⟩
 @[simp]
 lemma one_first : (1 : D).fst = 1 := by rfl
 
-@[simp,norm_cast]
+@[simp, norm_cast]
 lemma set_two_coe_one : ((1 : set2) : ℤ) = 1 := rfl
 
 
-lemma one_mulD (a : D) : 1*a = a := by
+lemma one_mulD (a : D) : 1 * a = a := by
   unfold D
   ext1
   · rw [mul_first]
@@ -99,7 +98,7 @@ lemma one_mulD (a : D) : 1*a = a := by
     push_cast
     simp
 
-lemma mul_oneD (a : D) : a*1 = a := by
+lemma mul_oneD (a : D) : a * 1 = a := by
   unfold D
   ext1
   · rw [mul_first]
@@ -123,24 +122,24 @@ lemma neg_coe (a : set2) : (-a : set2) = -(a : ℤ) := by rfl
 
 
 noncomputable instance : Inv D where
-  inv a := ⟨a.1^(-a.2),a.2⟩
+  inv a := ⟨a.1 ^ (-a.2), a.2⟩
 
 
 @[simp]
-lemma inv_first (a : D): (a⁻¹).fst = a.1^(-a.2) := by rfl
+lemma inv_first (a : D): (a⁻¹).fst = a.1 ^ (-a.2) := by rfl
 
 @[simp]
-lemma inv_snd (a : D) : (a⁻¹).snd = (a.2) := by rfl
+lemma inv_snd (a : D) : (a⁻¹).snd = a.2 := by rfl
 
 lemma set1_ne_zero (a : set1) : (a : ℂ) ≠ 0 := by
   cases' a with a ha
   rcases ha with (rfl|rfl|rfl|rfl)  <;> norm_num
-  intro h
-  apply_fun Complex.im at h
-  simp at h
-  intro h
-  apply_fun Complex.im at h
-  simp at h
+  · intro h
+    apply_fun Complex.im at h
+    simp at h
+  · intro h
+    apply_fun Complex.im at h
+    simp at h
 
 lemma set.mul_self (a : set2) : (a : ℤ) * a = 1 := by
   cases' a with a ha
@@ -149,17 +148,17 @@ lemma set.mul_self (a : set2) : (a : ℤ) * a = 1 := by
 lemma mul_left_invD (a : D): a⁻¹ * a = 1 := by
   unfold D
   ext1
-  · simp
+  · simp only [Prod.fst_one]
     rw [mul_first]
     ext1
     push_cast
     rw [inv_first, inv_snd]
     push_cast
-    simp
+    simp only [zpow_neg, ne_eq]
     apply inv_mul_cancel
     apply zpow_ne_zero
     exact set1_ne_zero a.1
-  · simp
+  · simp only [Prod.snd_one]
     rw [mul_snd, inv_snd]
     ext1
     push_cast
@@ -183,12 +182,12 @@ noncomputable instance : Fintype set1 := Set.fintypeInsert 1 _
 noncomputable instance : Fintype set2 := Set.fintypeInsert 1 _
 
 theorem card_eq_four : Fintype.card set1 = 4 := by
-  simp [set1]
+  simp only [Set.mem_insert_iff, Set.mem_singleton_iff, neg_inj, Set.toFinset_insert, Set.toFinset_singleton,
+    Finset.mem_insert, Finset.mem_singleton, forall_const, Fintype.card_ofFinset]
   iterate 3
     rw [Finset.card_insert_of_not_mem]
-  simp
   all_goals
-    simp [Complex.ext_iff]
+    simp only [Finset.mem_singleton, Finset.mem_insert, neg_inj, Complex.ext_iff]
     try norm_num
 
 theorem card_eq_two : Fintype.card set2 = 2 := by rfl
@@ -197,17 +196,17 @@ noncomputable instance : Fintype D := by unfold D ; infer_instance
 
 theorem card_eq_eight : Fintype.card D = 8 := by
   unfold D
-  rw [Fintype.card_prod,card_eq_four, card_eq_two]
+  rw [Fintype.card_prod, card_eq_four, card_eq_two]
 
 ---part ii)
 
 def i : set1 := ⟨Complex.I, by tauto⟩ 
 def a : D := (i , 1)
 def b : D := (1, -1)
-set_option pp.proofs.withType false
-lemma foo (d : D) (h₀ : d.snd = 1) : ∃ n : ℕ, n ≤ 3 ∧ d = a^n := by
+
+lemma eq_pow_a_of_snd_eq_one (d : D) (h₀ : d.snd = 1) : ∃ n : ℕ, n ≤ 3 ∧ d = a^n := by
   cases' d with x y
-  dsimp at h₀
+  dsimp only at h₀ 
   subst h₀
   cases' x with x hx
   rcases hx with (rfl|rfl|rfl|rfl)
@@ -220,36 +219,36 @@ lemma foo (d : D) (h₀ : d.snd = 1) : ∃ n : ℕ, n ≤ 3 ∧ d = a^n := by
     constructor
     norm_num
     apply Prod.ext
-    · dsimp
+    · dsimp only
       rw [sq]
       rw [mul_first]
       unfold a
-      dsimp
+      dsimp only
       ext1
       push_cast
       unfold i
-      dsimp
+      dsimp only
       norm_num
-    · dsimp
+    · dsimp only
       rw [sq]
       rw [mul_snd]
       unfold a
-      dsimp
+      dsimp only
       ext1
       push_cast
   · use 1
     constructor
     norm_num
     apply Prod.ext
-    · dsimp
+    · dsimp only
       rw [pow_one]
       unfold a
-      dsimp
+      dsimp only
       ext1
       push_cast
       unfold i
       dsimp
-    · dsimp
+    · dsimp only
       rw [pow_one]
       unfold a
       dsimp
@@ -257,36 +256,36 @@ lemma foo (d : D) (h₀ : d.snd = 1) : ∃ n : ℕ, n ≤ 3 ∧ d = a^n := by
     constructor
     norm_num
     apply Prod.ext
-    · dsimp
+    · dsimp only
       rw [pow_succ,sq]
       rw [mul_first]
       unfold a
-      dsimp
+      dsimp only
       ext1
       push_cast
       unfold i
       dsimp
       norm_num
-    · dsimp
+    · dsimp only
       rw [pow_succ,sq]
       rw [mul_snd]
       unfold a
-      dsimp
+      dsimp only
       ext1
       push_cast
 
 
 lemma b_self_inv : b * b = 1 := by
   apply Prod.ext
-  · dsimp
+  · dsimp only
     unfold b
-    dsimp
+    dsimp only
     ext1
     push_cast
     norm_num
-  · dsimp
+  · dsimp only
     unfold b
-    dsimp
+    dsimp only
     ext1
     push_cast
 
@@ -295,26 +294,24 @@ lemma bar (d : D) (h₀ : d.snd = -1) : ∃ d' : D, d'.snd = 1 ∧ d = d' * b :=
   use d * b
   constructor
   unfold b
-  dsimp
+  dsimp only [mul_snd]
   rw [h₀]
   norm_num
   rw [mul_assoc, b_self_inv, mul_one]
 
 lemma a_four: a^4 = 1 := by 
   apply Prod.ext
-  · dsimp
+  · dsimp only [Prod.fst_one]
     unfold a
     repeat rw [pow_succ]
     ext1
     push_cast
-    dsimp
+    dsimp only [mul_first, set1_coe_mul, coe_pow, set_two_coe_one]
     norm_num
     unfold i
-    dsimp
     norm_num
-  · dsimp
+  · dsimp only [Prod.snd_one]
     unfold a
-    dsimp
     ext1
     push_cast
 
@@ -327,11 +324,11 @@ lemma set2.eq_one_or_neg_one  (a : set2) : a = 1 ∨ a = -1 := by
   · right
     rfl
 
-theorem name : Set.univ = {1,a,a^2,a^3,b,a*b,a^2*b,a^3*b} := by
+theorem part_ii : Set.univ = {1, a, a ^ 2, a ^ 3, b, a * b, a ^ 2 * b, a ^ 3 * b} := by
   ext g
   simp
   cases' set2.eq_one_or_neg_one g.snd with h h
-  · have := foo g h
+  · have := eq_pow_a_of_snd_eq_one g h
     rcases this with ⟨n,hn₁,rfl⟩
     interval_cases n
     · simp
@@ -340,7 +337,7 @@ theorem name : Set.univ = {1,a,a^2,a^3,b,a*b,a^2*b,a^3*b} := by
     · tauto
   · have := bar g h
     rcases this with ⟨z,hz₁,rfl⟩
-    have := foo z hz₁
+    have := eq_pow_a_of_snd_eq_one z hz₁
     rcases this with ⟨n,hn₁,rfl⟩
     interval_cases n
     · simp
