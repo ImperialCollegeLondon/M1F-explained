@@ -3,7 +3,7 @@ import Mathlib.Data.Complex.Basic
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Data.Nat.Basic
 
-abbrev set1 : Set ℂ :=  {1, -1,Complex.I, -Complex.I}
+abbrev set1 : Set ℂ :=  {1, -1, Complex.I, -Complex.I}
 abbrev set2 : Set ℤ := {1, -1}
 def D := set1 × set2
 
