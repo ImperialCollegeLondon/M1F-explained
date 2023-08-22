@@ -14,7 +14,7 @@ import Mathlib.GroupTheory.Perm.Basic
 
 example {G : Type u_1} [CommGroup G] (a b : G) (n : ℕ) : (a*b)^n = a^n*b^n := by
   induction' n with n ih
-  · rw [pow_zero, pow_zero, pow_zero, mul_one]
+  · simp
   rw [Nat.succ_eq_add_one,pow_add,ih, mul_pow,mul_comm (a^1), mul_assoc, ← mul_assoc (b^n), ← pow_add,
     mul_comm (b^(n+1)), ← mul_assoc, ← pow_add]
 
