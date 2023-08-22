@@ -2,16 +2,17 @@ import Mathlib.Algebra.Group.Defs
 import Mathlib.Data.Complex.Basic
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Data.Nat.Basic
+
 abbrev complex_size_1 :=
 { z : ℂ // ‖z‖  = 1 }
 
-instance one : One complex_size_1 := ⟨1,  by exact CstarRing.norm_one⟩
+instance one : One complex_size_1 := ⟨1, by exact CstarRing.norm_one⟩
 
 @[simp]
 lemma coe_one : (↑(1 : complex_size_1) : ℂ) = 1 := by rfl
 
 lemma mul_closed (a b : complex_size_1) : ‖(a : ℂ) * b‖ = 1 := by
-  rw [norm_mul, a.2,b.2, mul_one]
+  rw [norm_mul, a.2, b.2, mul_one]
 
 --- part i
 
@@ -28,9 +29,8 @@ lemma ne_zero (a : complex_size_1) : (a : ℂ) ≠ 0 := by
   norm_num at h
 
 noncomputable instance : Group complex_size_1 where
-  mul a b:= ⟨a.1 * b.1, mul_closed a b⟩
-  mul_assoc := by 
-    intro a b c
+  mul a b := ⟨a.1 * b.1, mul_closed a b⟩
+  mul_assoc a b c := by 
     ext1
     simp [mul_assoc]
   one := 1
@@ -42,7 +42,7 @@ noncomputable instance : Group complex_size_1 where
     intro a
     ext1
     simp
-  inv z := ⟨z.1⁻¹, by rw [norm_inv,z.2, inv_one]⟩
+  inv z := ⟨z.1⁻¹, by rw [norm_inv, z.2, inv_one]⟩
   mul_left_inv := by
     intro a
     ext1
@@ -54,7 +54,7 @@ noncomputable instance : Group complex_size_1 where
 abbrev real_not_minus_1 :=
 {x : ℝ // x ≠ -1}
 
-instance zero : Zero real_not_minus_1 := ⟨0,  by norm_num⟩ 
+instance zero : Zero real_not_minus_1 := ⟨0, by norm_num⟩ 
 
 lemma add_closed2 (a b : real_not_minus_1) : (a : ℝ) * b + a + b ≠ -1 := by
   by_contra h
@@ -92,7 +92,7 @@ lemma add_assoc2 (a b c : real_not_minus_1) : a + b + c = a + (b + c) := by
   push_cast
   ring
 
-lemma neg_real_neq_one (a : real_not_minus_1) : -a.1/(a.1 + 1) ≠ -1 := by
+lemma neg_real_neq_one (a : real_not_minus_1) : -a.1 / (a.1 + 1) ≠ -1 := by
   intro h
   simp at h
   have : a.1 + 1 ≠ 0 := by
@@ -100,24 +100,24 @@ lemma neg_real_neq_one (a : real_not_minus_1) : -a.1/(a.1 + 1) ≠ -1 := by
     intro h₀
     apply this
     exact Iff.mp add_eq_zero_iff_eq_neg h₀
-  have h₁ : a.1/(a.1 + 1) = 1  := by
+  have h₁ : a.1 / (a.1 + 1) = 1  := by
     calc
-      a.1/ (a.1 + 1) = -(-a.1/(a.1 + 1)) := by ring
+      a.1 / (a.1 + 1) = -(-a.1 / (a.1 + 1)) := by ring
       _ = -(-1) := by rw [h]
     ring
   have h₂ : a.1 = a.1 + 1 := by
     calc
-      a.1 = a.1/(a.1 + 1) * (a.1 + 1) := Iff.mp (div_eq_iff this) rfl
+      a.1 = a.1 / (a.1 + 1) * (a.1 + 1) := Iff.mp (div_eq_iff this) rfl
       _ = a.1 + 1 := by
         rw [h₁]
         ring
   simp at h₂
 
 noncomputable instance : Neg real_not_minus_1 where
-  neg a := ⟨-a/(a + 1), neg_real_neq_one a⟩
+  neg a := ⟨-a / (a + 1), neg_real_neq_one a⟩
 
 @[norm_cast]
-lemma coe_neg (a : real_not_minus_1) : (-a : real_not_minus_1) = -(a : ℝ)/(a+1) := by rfl
+lemma coe_neg (a : real_not_minus_1) : (-a : real_not_minus_1) = -(a : ℝ) / (a + 1) := by rfl
 
 noncomputable instance : AddGroup real_not_minus_1 where
   add_assoc := add_assoc2
@@ -137,8 +137,8 @@ noncomputable instance : AddGroup real_not_minus_1 where
     ext
     push_cast
     calc
-      _ = -a.1/(a.1+1) *a.1 + -a.1/(a.1 + 1) + (a.1 * (a.1 +1))/(a.1 + 1) := by
-        simp
+      _ = -a.1 / (a.1 + 1) * a.1 + -a.1 / (a.1 + 1) + (a.1 * (a.1 + 1)) / (a.1 + 1) := by
+        simp only [ne_eq, add_right_inj]
         have : a.1 + 1 ≠ 0 := by
           have := a.2
           intro h₀
@@ -170,7 +170,7 @@ lemma add_part_iv_coe (a b : part_iv): (a + b : part_iv) = max (a : ℝ) b := by
 example (a b : part_iv) (h : a.1 > 0): a.1 + b.1 ≠ 0 := by
   intro h₀
   norm_cast at h₀
-  simp at h₀
+  simp only [NNReal.val_eq_coe, NNReal.coe_eq_zero, add_eq_zero_iff] at h₀ 
   rcases h₀ with ⟨ha⟩
   have : a ≠ 0 := ne_of_gt h
   exact this ha
@@ -180,7 +180,7 @@ example (a b : part_iv) (h : a.1 > 0): a.1 + b.1 ≠ 0 := by
 def part_v : Set ℂ :=
 {z | z^3 - z^2 + z - 1 = 0}
 
-example : ∃ a ∈  part_v, ∃ b ∈ part_v, ¬ a*b ∈ part_v := by
+example : ∃ a ∈  part_v, ∃ b ∈ part_v, ¬ a * b ∈ part_v := by
   sorry
 
 --- part vi
@@ -189,7 +189,7 @@ def part_vi :=
 {z : ℂ  // z ≠ 0}
 
 noncomputable instance semigroup_part_vi : Semigroup part_vi where
-  mul a b := ⟨‖a.1‖*b.1,sorry⟩
+  mul a b := ⟨‖a.1‖ * b.1,sorry⟩
   mul_assoc := sorry
 
 example (a : sorry) : sorry := sorry
