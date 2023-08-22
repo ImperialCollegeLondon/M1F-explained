@@ -64,12 +64,13 @@ No statements have been formalised here.
 ## Chapter 10
 
 Ex 1 : done
-Ex 2 : part a statment done, part b done
+Ex 2 : done
 Ex 3 : part a, b done. Part c statment
 Ex 4 : done
 Ex 5 : done
 
 Ex 7 : done
+
 
 
 ## Chapters 11-12
