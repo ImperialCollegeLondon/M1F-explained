@@ -76,6 +76,9 @@ Ex 7 : done
 
 Ex 8 : done
 
+
+
+Ex 9 : done
 ## Chapters 11-12
 
 nothing formalised
