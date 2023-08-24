@@ -128,4 +128,11 @@ Q1-9 statements formalised, no proofs
 
 ## Chapter 25 
 
-Ex 3 done, Ex 5 parts a and b done. Ex 1 part i done, Ex 7 progress
+Ex 1 parts i and ii done, iv to vi stated
+Ex 3,4 done
+Ex 5 parts a and b done. 
+Ex 7 parts i to iii done
+
+## Chapter 26
+
+Ex 10 part a done, part b stated
